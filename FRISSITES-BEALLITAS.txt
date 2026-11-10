@@ -1,0 +1,20 @@
+NRML Client 2.2.0 - BEÉPÍTETT FRISSÍTŐ (Update gomb)
+====================================================
+EGYSZER KELL BEÁLLÍTANI:
+1) Hozz létre egy GitHub repót (pl. Nermal/nrml-client, lehet publikus).
+2) Nyisd meg: resources/app/update-config.json és írd át a "repo" értékét: "Creep3215/nrmlclient (már beírva)"
+3) Építsd be és add ki ezt a verziót a felhasználóknak (ez az utolsó kézi letöltés).
+
+MINDEN ÚJ FRISSÍTÉSNÉL:
+1) Készítsd el az új resources/app mappát (magasabb verzió a package.json-ban!).
+2) node tools/publish-update.js <resources/app mappa> NRML-update-private-key.pem "Mi változott"
+   (ha be vagy lépve a gh-ba: add hozzá a végére: --release)
+   -> létrejön release-X.Y.Z/ mappa: app-X.Y.Z.zip + version.json
+3) GitHubon: Másold a release-X.Y.Z mappa 2 fájlját a repo updates/ mappájába (version.json + app zip), commit.
+A kliensek 6 óránként (és indításkor) ellenőriznek; "Frissítés" gomb -> letölti, ellenőrzi, újraindul.
+
+BIZTONSÁG: a NRML-update-private-key.pem a privát kulcsod. SOHA ne tedd fel GitHubra,
+ne oszd meg senkivel. Aki ezt megszerzi, mindenkinek kártékony frissítést küldhet.
+A kliens csak az aláírt, ellenőrzött csomagot fogadja el; régebbit / sérültet eldob.
+Hiba esetén (3 sikertelen indulás) automatikusan visszaáll a beépített verzióra.
+Korlát: csak az app mappa frissül (main/app/lang/style/bundled). Electron/node_modules cseréjéhez új teljes letöltés kell.
