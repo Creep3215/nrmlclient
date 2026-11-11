@@ -1,8 +1,8 @@
 {
-  "version": "2.2.1",
-  "file": "app-2.2.1.zip",
-  "size": 216388,
-  "sha256": "a17af326b46241e3267bb13e81604a69334321e410465c3d91e32f73ff55f5ea",
-  "sig": "n4uIH/omHj7ymKbPRYLmi8/9O8qnXHP40lPCXnmIsCMLCLIEd7N8uHEByUY+HnY+8EJ8YblO/46mzHJMUgxEAQ==",
-  "notes": "Új intro: a sáv lecsúszik, Client szó beúszik, finom kilépés"
+  "version": "2.2.2",
+  "file": "app-2.2.2.zip",
+  "size": 216456,
+  "sha256": "ea1f477d979450b77fd9795a10a02eefe8abb8ff2500cc8a2601d3dda803f707",
+  "sig": "JgFBe7xVRjjWdM3yF2hHBu4Y1yRh/eBzrCP313Q8FJCwaiSt7+Bh5ft8avSV+mbdbWvdoFulSlM9PwYcVKftAQ==",
+  "notes": "Új pink téma a menü témák között"
 }

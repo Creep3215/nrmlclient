@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.2.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.2.2 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -255,13 +255,14 @@ async function nxBanUpd(){const b=document.getElementById('nxban');if(b&&b.datas
 // ===== NRML Client 2.1.0: main menu theme designer =====
 const TH={d:null,src:null,srcImg:null,custom:false};
 const TH_PRESETS={sunset:['#1b1030','#ff7a2f','#ffd08a'],dawn:['#1a1030','#ff6fa0','#ffd0e0'],night:['#02030a','#6aa8ff','#c8dcff'],
-  mist:['#8aa0aa','#59d6a0','#eef3ef'],ocean:['#0a2a52','#2fb8ff','#bfeaff'],nether:['#1a0404','#ff4a1a','#ffb060']};
+  mist:['#8aa0aa','#59d6a0','#eef3ef'],ocean:['#0a2a52','#2fb8ff','#bfeaff'],nether:['#1a0404','#ff4a1a','#ffb060'],pink:['#2a0f2e','#ff4fa3','#ffc2e2']};
 const TH_SC={
   sunset:{sky:['#1b1030','#6b2a5e','#ff7a3d','#ffd08a'],sun:[.7,.5],sunc:'#fff0c0',fog:'#ff9a5a',land:['#1a0c14','#3a1a1f'],water:1},
   dawn:{sky:['#1a1030','#5a3a7a','#ff6fa0','#ffd9c0'],sun:[.3,.52],sunc:'#fff4e0',fog:'#ffb0c0',land:['#1c1024','#40243a'],water:1},
   night:{sky:['#02030a','#091030','#1b2d5c'],sun:[.62,.28],sunc:'#e8f0ff',fog:'#27407a',land:['#04060e','#0e1428'],stars:1,water:1},
   mist:{sky:['#8aa0aa','#c4d4d8','#eef3ef'],sun:[.5,.4],sunc:'#ffffff',fog:'#dfe9e8',land:['#2c4a40','#5d8576'],mist:1},
   ocean:{sky:['#0a2a52','#1e6aa8','#8fd3f0'],sun:[.28,.4],sunc:'#ffffff',fog:'#9fdcf2',land:['#0a3a4a','#1d6a78'],water:1},
+  pink:{sky:['#2a0f2e','#8a2a7a','#ff6fb5','#ffd0e8'],sun:[.5,.48],sunc:'#fff0f8',fog:'#ff9fcf',land:['#1f0f26','#4a2050'],water:1},
   nether:{sky:['#1a0404','#4a0b08','#a3200a'],fog:'#d4401a',land:['#1c0505','#4a1208'],lava:1}};
 function thGen(name){
   const sc=TH_SC[name]||TH_SC.sunset,W=2400,H=900,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
