@@ -40,7 +40,7 @@ const ROOT=path[_0x5dd4ae(0x372)](app[_0x5dd4ae(0x186)](_0x5dd4ae(0x228)),_0x5dd
     optimize:a=>{id(a[0]);},
     finfo:a=>{id(a[0]);oneOf(a[1],DIRS);},fmeta:a=>{id(a[0]);oneOf(a[1],DIRS);},
     fdetail:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},freveal:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},
-    sysinfo:none,pbackup:a=>id(a[0]),'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
+    sysinfo:none,pbackup:a=>id(a[0]),'launch:begin':none,'launch:cancel':none,'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
     'theme:save':a=>{const o=a[0];obj(o);id(o.id);bool(o.on);for(const k of Object.keys(o))if(!['id','on','preset','blur','speed','bright','zoom','custom','faces','prev','btn','anim','logo','splash','font','static','accent','ui'].includes(k))bad();
       str(o.preset,20,true);for(const k of ['blur','speed','bright','zoom'])if(o[k]!=null&&!Number.isFinite(o[k]))bad();
       if(o.faces!=null){if(!Array.isArray(o.faces)||o.faces.length!==6)bad();o.faces.forEach(f=>str(f,3500000));}str(o.prev,200000,true);str(o.accent,7,true);for(const k of ['btn','anim','logo','splash','font','static'])if(o[k]!=null)bool(o[k]);if(o.ui!=null){obj(o.ui);for(const k of Object.keys(o.ui)){if(!['button','buttonH','buttonD','logo','edition','bg'].includes(k))bad();str(o.ui[k],k==='bg'?12000000:2500000);}}},
@@ -645,3 +645,12 @@ try{
   }catch{}});});
   app.on('second-instance',()=>{try{if(win&&!win.isDestroyed()){if(win.isMinimized())win.restore();if(!win.isVisible())win.show();win.focus();}}catch{}});
 }catch{}
+
+// ---- 2.4.0 cancel launch ----
+const __LC={cancelled:false};
+ipcMain.handle('launch:begin',()=>{__LC.cancelled=false;return true;});
+ipcMain.handle('launch:cancel',()=>{__LC.cancelled=true;try{if(mcPid)process.kill(mcPid);}catch{}try{send('status','');}catch{}return true;});
+try{const _cp=require('child_process'),_sp2=_cp.spawn;
+  _cp.spawn=function(cmd){const c=_sp2.apply(this,arguments);try{if(__LC.cancelled&&/java/i.test(String(cmd)))setTimeout(()=>{try{c.kill();}catch{}},0);}catch{}return c;};}catch{}
+try{app.on('browser-window-created',(e,w)=>{setImmediate(()=>{try{if(w!==win)return;const _ws=w.webContents.send.bind(w.webContents);
+  w.webContents.send=function(ch,...a){if(__LC.cancelled&&ch==='crashed')return;return _ws(ch,...a);};}catch{}});});}catch{}

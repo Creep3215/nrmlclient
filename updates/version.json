@@ -1,14 +1,14 @@
 {
-  "version": "2.3.1",
-  "file": "app-2.3.1.zip",
-  "size": 220105,
-  "sha256": "b9b5a189feab51dc84678540e5c12d22d8dd5e154bb45e7f1c23d34847ab911f",
-  "sig": "QSnzed12eJppDrvvIOhkVV/JwkM3uQmuoIWDKlAzeb+csxODKTWVQRDNN+6so/K0e63b3IbRPS7Mzjw6jBVnAg==",
+  "version": "2.4.0",
+  "file": "app-2.4.0.zip",
+  "size": 222492,
+  "sha256": "9a71b1ac4c5079df1a08e1d81db28b1e09099f4d0ecc744efc37d2f0d72c2f18",
+  "sig": "PaFppjcj/HlU0dPfp+NAHtvqTMkMAjg/ZrYL+x42C1RZeuByjS2OYMu1dA/ThIM0jktbNpEopvhYWRgCs57BCA==",
   "notes": {
-    "en": "New launcher intro: the line drops and Client is written in smoothly. Starts only when the window is visible.",
-    "hu": "Új indítókép: a csík lecsúszik, a Client szó simán beíródik. Csak akkor indul, amikor az ablak látszik.",
-    "es": "Nueva intro: la línea baja y aparece Client con suavidad. Empieza cuando la ventana es visible.",
-    "pt": "Nova abertura: a linha desce e Client aparece suavemente. Começa quando a janela está visível.",
-    "fr": "Nouvelle intro : la ligne descend et Client apparaît en douceur. Démarre quand la fenêtre est visible."
+    "en": "New Play animation: the button flies to the centre and becomes a loader with live status and a Cancel launch button. Much smoother update animation.",
+    "hu": "Új Play animáció: a gomb középre repül és töltőkörré alakul élő állapottal és Indítás megszakítása gombbal. Sokkal simább frissítés-animáció.",
+    "es": "Nueva animación de Jugar: el botón vuela al centro y se convierte en un cargador con estado en vivo y botón Cancelar. Animación de actualización mucho más fluida.",
+    "pt": "Nova animação de Jogar: o botão voa para o centro e vira um carregador com status ao vivo e botão Cancelar. Animação de atualização bem mais suave.",
+    "fr": "Nouvelle animation Jouer : le bouton vole au centre et devient un chargeur avec statut en direct et bouton Annuler. Animation de mise à jour bien plus fluide."
   }
 }
