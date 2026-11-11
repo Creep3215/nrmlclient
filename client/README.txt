@@ -1,4 +1,4 @@
-NRML Client 2.2.0 (STABLE)  -  Developed by Nermal
+NRML Client 2.3.0 (STABLE)  -  Developed by Nermal
 
 EN
 A fast, clean Minecraft: Java Edition client for Fabric. Requires a licensed Minecraft account.
@@ -79,5 +79,5 @@ CHANGELOG 2.1.5
 CHANGELOG 2.1.6
 - Custom (Poppins) font now only on the menu buttons (Singleplayer, Multiplayer, Realms, Options, Quit, pause menu). Chat, scoreboards and server text keep the vanilla font (font uses private-use glyphs + translated button labels)
 
-CHANGELOG 2.2.0
+CHANGELOG 2.3.0
 - Menu theme font reworked (additive glyph mapping + skip list) and self-healing: if the game crashes natively right after loading the theme, the launcher first strips the font, then the whole theme, so the next start works

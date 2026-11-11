@@ -1,8 +1,14 @@
 {
-  "version": "2.2.3",
-  "file": "app-2.2.3.zip",
-  "size": 216599,
-  "sha256": "82bff20054d19f559a322abc4ce2389d988fc3b2e0c417a585b879a624e7b7c3",
-  "sig": "o1KMn3XISrR0vVcvZB2ymOlm5cl7yA752qH9nXeLBy8Tn5OJRV76MsIkHpqoitBEXf0aweZK2RtW16fg9OMDDw==",
-  "notes": "Javítás: a frissített felület és intro is betöltődik; pink téma; új intro"
+  "version": "2.3.0",
+  "file": "app-2.3.0.zip",
+  "size": 219427,
+  "sha256": "ad42b38850c5fb26e22fd8cb9540c30fb51c92a76067fe5a5d553197e7e41228",
+  "sig": "MHfGsFQaN5DiW8waMFy93SI6NqVj4a45+62qdMcfuVtxQPvZYjEGpV9n22aSClXTYkE4+uMvA6t15Vco/IupDQ==",
+  "notes": {
+    "en": "Fixed the update button, settings version and slow app start. New cinematic updater and a smoother NRML intro.",
+    "hu": "Javítva: az update gomb, a settings verziószáma és az app lassú indulása. Új filmes frissítő animáció és simább NRML intro.",
+    "es": "Corregidos el botón de actualizar, la versión en ajustes y el arranque lento. Nuevo actualizador cinematográfico e intro NRML más fluida.",
+    "pt": "Corrigidos o botão de atualizar, a versão nas configurações e a abertura lenta. Novo atualizador cinematográfico e intro NRML mais suave.",
+    "fr": "Correction du bouton de mise à jour, de la version dans les paramètres et du démarrage lent. Nouvel assistant de mise à jour cinématique et intro NRML plus fluide."
+  }
 }

@@ -5,14 +5,15 @@ body{display:flex}.hide{display:none!important}
 .brand.on{opacity:1;transform:none;transition:opacity .5s cubic-bezier(.2,.9,.25,1),transform .6s cubic-bezier(.2,.9,.25,1)}
 .brand .big{font-size:64px;line-height:.9;font-weight:700;font-stretch:75%;letter-spacing:.14em;margin-right:-.14em;color:#e9e6df}
 .brand .sub{position:relative;height:24px;margin-top:6px}
-.brand .bar{position:absolute;left:0;right:0;top:4px;height:3px;background:var(--acc,#ff5a1f);transform-origin:right;transform:scaleX(0);opacity:0}
-.brand .small{position:absolute;right:0;top:0;font:500 13px "Cascadia Mono",Consolas,monospace;letter-spacing:.5em;text-transform:uppercase;color:#e9e6df;margin-right:-.5em;opacity:0;transform:translateY(-12px)}
+.brand .bar{position:absolute;left:0;right:0;top:4px;height:3px;background:var(--acc,#ff5a1f);transform-origin:right;transform:scaleX(0);opacity:0;border-radius:2px}
+.brand .small{position:absolute;right:0;top:0;font:500 13px "Cascadia Mono",Consolas,monospace;letter-spacing:.5em;text-transform:uppercase;color:#e9e6df;margin-right:-.5em;white-space:nowrap}
+.brand .small span{display:inline-block;opacity:0;transform:translateY(-14px);filter:blur(5px)}
 .brand.on.out{opacity:0;transform:translateX(26px);transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1)}
-.brand.on .bar{animation:barIn .55s .25s cubic-bezier(.2,.9,.25,1) forwards,barDown .6s 1.05s cubic-bezier(.5,0,.2,1) forwards}
-.brand.on .small{animation:cliIn .7s 1.3s cubic-bezier(.2,.9,.25,1) forwards}
+.brand.on .bar{animation:barIn .7s .3s cubic-bezier(.2,.9,.25,1) forwards,barDown .9s 1.2s cubic-bezier(.45,0,.15,1) forwards}
+.brand.on .small span{animation:chIn .85s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:calc(1.55s + var(--i)*.09s)}
 @keyframes barIn{from{transform:scaleX(0);opacity:1}to{transform:scaleX(1);opacity:1}}
-@keyframes barDown{from{transform:scaleX(1) translateY(0);opacity:1}to{transform:scaleX(1) translateY(22px);opacity:0}}
-@keyframes cliIn{from{opacity:0;transform:translateY(-12px)}to{opacity:.92;transform:none}}
+@keyframes barDown{from{transform:scaleX(1) translateY(0);opacity:1}60%{opacity:.85}to{transform:scaleX(.55) translateY(24px);opacity:0}}
+@keyframes chIn{from{opacity:0;transform:translateY(-14px);filter:blur(5px)}to{opacity:.95;transform:none;filter:blur(0)}}
 .wl{margin:auto;display:flex;align-items:center;gap:26px;opacity:0;animation:wl 6.4s cubic-bezier(.2,.9,.25,1) forwards;text-shadow:0 3px 20px rgba(0,0,0,.8)}
 .wl svg{width:78px;height:78px;overflow:visible;filter:drop-shadow(0 4px 14px rgba(0,0,0,.6));animation:rise .7s cubic-bezier(.2,.9,.25,1) both}
 .wl .pre{font:600 15px "Cascadia Mono",Consolas,monospace;letter-spacing:.5em;text-transform:uppercase;color:var(--acc,#ff5a1f);animation:rise .7s .15s cubic-bezier(.2,.9,.25,1) both}
@@ -22,10 +23,10 @@ body{display:flex}.hide{display:none!important}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}}@keyframes rule{from{transform:scaleX(0)}}
 .f1{fill:#e9e6df}.f2{fill:#3b3b3f}.f3{fill:var(--acc,#ff5a1f)}
 </style></head><body>
-<div class="brand hide" id="brand"><div class="big">NRML</div><div class="sub"><div class="bar"></div><div class="small">Client</div></div></div>
+<div class="brand hide" id="brand"><div class="big">NRML</div><div class="sub"><div class="bar"></div><div class="small" id="cli"></div></div></div>
 <div class="wl hide" id="wl"><svg viewBox="0 0 64 64"><polygon class="f1" points="32,5 56,19 32,33 8,19"/><polygon class="f2" points="8,19 32,33 32,61 8,47"/><polygon class="f3" points="32,33 56,19 56,47 32,61"/></svg><div><div class="pre" id="pre"></div><div class="name" id="nm"></div><div class="rule"></div></div></div>
 <script>
 const q=new URLSearchParams(location.search),mode=q.get('mode');if(/^#[0-9a-f]{6}$/i.test(q.get('acc')||''))document.documentElement.style.setProperty('--acc',q.get('acc'));
 if(mode==='welcome'){document.getElementById('pre').textContent=q.get('pre')||'Welcome';document.getElementById('nm').textContent=(q.get('name')||'')+(q.get('bang')||'');document.getElementById('wl').classList.remove('hide')}
-else{document.getElementById('brand').classList.remove('hide');window.setShown=on=>{const e=document.getElementById('brand');if(!on){if(e.classList.contains('on'))e.classList.add('out');return;}if(e.classList.contains('on')&&!e.classList.contains('out'))return;e.classList.remove('on','out');void e.offsetWidth;const go=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add('on')));document.visibilityState==='visible'?go():document.addEventListener('visibilitychange',function f(){if(document.visibilityState==='visible'){document.removeEventListener('visibilitychange',f);go();}})}}
+else{const cli=document.getElementById('cli');if(cli)cli.innerHTML=[...'Client'].map((c,i)=>'<span style="--i:'+i+'">'+c+'</span>').join('');document.getElementById('brand').classList.remove('hide');window.setShown=on=>{const e=document.getElementById('brand');if(!on){if(e.classList.contains('on'))e.classList.add('out');return;}if(e.classList.contains('on')&&!e.classList.contains('out'))return;e.classList.remove('on','out');void e.offsetWidth;const go=()=>setTimeout(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add('on'))),350);document.visibilityState==='visible'?go():document.addEventListener('visibilitychange',function f(){if(document.visibilityState==='visible'){document.removeEventListener('visibilitychange',f);go();}})}}
 </script></body></html>

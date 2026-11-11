@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.2.3 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.3.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -416,28 +416,60 @@ async function thSave(){
   if(a&&!a.querySelector('.thbtn'))a.insertAdjacentHTML('afterbegin','<button class="thbtn" onclick="thDlg()">'+NXI.edit+' '+esc(t('th_btn'))+'</button>');};}
 
 
-/* ---- 2.2.0 self-update pill ---- */
-const NXUP={s:null,t:null};
+/* ---- 2.3.0 self-update: centred prompt + cinematic installer ---- */
+const NXUP={s:null,t:null,hid:null,cin:null};
+const NX_CUBE='<svg viewBox="0 0 64 64" class="cn-cube"><polygon fill="#e9e6df" points="32,5 56,19 32,33 8,19"/><polygon fill="#3b3b3f" points="8,19 32,33 32,61 8,47"/><polygon fill="var(--acc,#ff5a1f)" points="32,33 56,19 56,47 32,61"/></svg>';
+function nxNotes(s){const n=s&&s.notes;if(!n)return '';if(typeof n==='string')return n;return n[lang]||n.en||'';}
+function nxUpdLayer(){let b=document.getElementById('nxupd');if(!b){document.body.insertAdjacentHTML('beforeend','<div id="nxupd" role="dialog" aria-modal="true"></div>');b=document.getElementById('nxupd');}return b;}
+function nxUpdClose(later){const b=document.getElementById('nxupd');if(b){b.classList.remove('on');b.classList.add('out');setTimeout(()=>{if(!b.classList.contains('on'))b.innerHTML='';},500);}
+  if(later&&NXUP.s)NXUP.hid=NXUP.s.latest;NXUP.cin=null;}
 function nxUpdDraw(s){
-  NXUP.s=s;let b=document.getElementById('nxupd');
-  const show=s&&(s.status==='available'||s.status==='downloading'||s.status==='ready'||s.status==='error'&&NXUP.manual);
-  if(!show){if(b)b.classList.remove('on');return;}
-  if(!b){document.body.insertAdjacentHTML('beforeend','<div id="nxupd" role="status"></div>');b=document.getElementById('nxupd');}
-  let h='';
-  if(s.status==='available')h='<div class="nb-t"><b>'+esc(t('up_a',s.latest))+'</b><span>'+esc(s.notes||t('up_b'))+'</span></div><button class="solid" onclick="nxUpdGo()">'+esc(t('up_btn'))+'</button><button class="txt nb-x" onclick="nxUpdHide()" aria-label="x">'+NXI.x+'</button>';
-  else if(s.status==='downloading')h='<div class="nb-t"><b>'+esc(t('up_dl',s.pct|0))+'</b><i class="up-bar"><u style="width:'+(s.pct|0)+'%"></u></i></div>';
-  else if(s.status==='ready')h='<div class="nb-t"><b>'+esc(t('up_rdy'))+'</b><span>'+esc(t('up_rdy2'))+'</span></div><button class="solid" onclick="A(\'upd:restart\')">'+esc(t('up_rs'))+'</button>';
-  else h='<div class="nb-t"><b>'+esc(t('up_err'))+'</b><span>'+esc(s.err||'')+'</span></div><button class="txt nb-x" onclick="nxUpdHide()" aria-label="x">'+NXI.x+'</button>';
-  b.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('on')));
+  NXUP.s=s;if(NXUP.cin||!s)return;
+  const dismissed=NXUP.hid&&NXUP.hid===s.latest;
+  if((s.status==='available'||s.status==='ready')&&!dismissed){
+    const b=nxUpdLayer(),ready=s.status==='ready',key=s.status+'|'+s.latest;
+    if(b.dataset.k===key&&b.classList.contains('on'))return;
+    b.dataset.k=key;b.className='';
+    b.innerHTML='<div class="up-card"><div class="up-ic">'+NX_CUBE+'</div><div class="up-tx"><b>'+esc(ready?t('ud_ready'):t('ud_title',s.latest))+'</b><span>'+esc(ready?t('ud_ready2',s.latest):(nxNotes(s)||t('ud_sub')))+'</span></div>'
+      +'<div class="up-act"><button class="solid" onclick="'+(ready?'nxUpdRestart()':'nxUpdGo()')+'">'+esc(ready?t('ud_restart'):t('ud_btn'))+'</button><button class="txt" onclick="nxUpdClose(true)">'+esc(t('ud_later'))+'</button></div></div>';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('on')));
+  }
 }
-function nxUpdHide(){const b=document.getElementById('nxupd');if(b)b.classList.remove('on');NXUP.hid=NXUP.s&&NXUP.s.latest;}
-async function nxUpdGo(){try{nxUpdDraw(await A('upd:install'));}catch{}nxUpdPoll();}
+function nxUpdRestart(){try{A('upd:restart');}catch{}const b=document.getElementById('nxupd');if(b)b.classList.add('go');}
+async function nxUpdGo(){
+  let s=NXUP.s;try{s=await A('upd:install');}catch{}NXUP.s=s;
+  const b=nxUpdLayer();b.className='';b.dataset.k='cin';
+  b.innerHTML='<div class="cn"><div class="cn-bg"></div><div class="cn-glow"></div><div class="cn-sweep"></div>'
+    +'<div class="cn-c"><div class="cn-logo">'+NX_CUBE+'<i class="cn-ring"></i><i class="cn-ring r2"></i><svg class="cn-ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'
+    +'<div class="cn-h">'+esc(t('ud_h1'))+'</div><div class="cn-v">'+esc((s&&s.latest)||'')+'</div>'
+    +'<div class="cn-bar"><u></u></div><div class="cn-row"><span class="cn-ph">'+esc(t('ud_p_dl'))+'</span><span class="cn-pc">0%</span></div>'
+    +'<div class="cn-act"></div></div></div>';
+  b.classList.add('on','cin');
+  NXUP.cin={t0:performance.now(),p:0,done:false,err:false};nxUpdPoll();requestAnimationFrame(nxCinTick);
+}
+function nxCinTick(){
+  const c=NXUP.cin,b=document.getElementById('nxupd');if(!c||!b)return;
+  const s=NXUP.s||{},el=(performance.now()-c.t0)/1000,MIN=5.0;
+  if(s.status==='error'&&!c.err){c.err=true;const a=b.querySelector('.cn-act');b.classList.add('bad');
+    b.querySelector('.cn-ph').textContent=t('ud_err');b.querySelector('.cn-pc').textContent='';
+    a.innerHTML='<div class="cn-er">'+esc(s.err||'')+'</div><button class="txt" onclick="nxUpdClose(true)">'+esc(t('ud_close'))+'</button>';return;}
+  if(c.err)return;
+  const real=s.status==='ready'?100:Math.min(94,(s.pct|0)*.94),target=Math.min(real,Math.min(100,el/MIN*100));
+  c.p=Math.max(c.p,c.p+(target-c.p)*.12);if(target-c.p<.08)c.p=target;
+  const p=Math.min(100,c.p);
+  b.querySelector('.cn-bar u').style.width=p+'%';b.querySelector('.cn-pc').textContent=Math.floor(p)+'%';
+  b.querySelector('.cn-ph').textContent=t(p<68?'ud_p_dl':p<92?'ud_p_ver':p<99.9?'ud_p_ins':'ud_p_done');
+  if(p>=99.9&&s.status==='ready'&&!c.done){c.done=true;b.classList.add('fin');
+    b.querySelector('.cn-act').innerHTML='<div class="cn-er ok">'+esc(t('ud_ready2',s.latest))+'</div><button class="solid" onclick="nxUpdRestart()">'+esc(t('ud_restart'))+'</button><button class="txt" onclick="nxUpdClose(true)">'+esc(t('ud_later'))+'</button>';}
+  requestAnimationFrame(nxCinTick);
+}
 function nxUpdPoll(){
   clearTimeout(NXUP.t);
+  const fast=!NXUP.s||NXUP.s.status==='downloading'||NXUP.cin;
   NXUP.t=setTimeout(async()=>{let s;try{s=await A('upd:state');}catch{return;}
-    if(!(NXUP.hid&&NXUP.hid===s.latest&&s.status==='available'))nxUpdDraw(s);
-    if(s.status==='downloading'||s.status==='checking')nxUpdPoll();else NXUP.t=setTimeout(nxUpdPoll,60000);},s0());
-  function s0(){return !NXUP.s||NXUP.s.status==='downloading'?400:15000;}
+    nxUpdFix(s);nxUpdDraw(s);NXUP.s=s;nxUpdPoll();},fast?350:20000);
 }
-async function nxUpdManual(){NXUP.manual=true;NXUP.hid=null;try{nxUpdDraw(await A('upd:check'));}catch{}nxUpdPoll();}
-setTimeout(nxUpdPoll,3000);
+/* real version number in the settings footer */
+function nxUpdFix(s){if(!s||!s.cur||NXUP.fixed===s.cur)return;NXUP.fixed=s.cur;
+  for(const l in T){if(T[l]&&typeof T[l].st_note==='string')T[l].st_note=T[l].st_note.replace(/NRML Client \d+\.\d+\.\d+/,'NRML Client '+s.cur);}}
+setTimeout(nxUpdPoll,1500);

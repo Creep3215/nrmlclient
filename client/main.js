@@ -539,7 +539,7 @@ setTimeout(()=>{try{
 
 
 // ===== 2.2.0 self-updater: signed app-only updates from GitHub Releases =====
-const __UPD={st:{status:'idle',cur:'',latest:null,notes:'',pct:0,err:'',configured:false},man:null,busy:false};
+const __UPD={st:{status:'idle',cur:'',latest:null,notes:{},pct:0,err:'',configured:false},man:null,busy:false};
 function __uCfg(){
   try{
     const c=JSON.parse(fs.readFileSync(path.join(__dirname,'update-config.json'),'utf8'));
@@ -573,7 +573,8 @@ function __uMan(raw,cfg){
   const m=JSON.parse(raw.toString('utf8'));
   if(!m||!/^\d+\.\d+\.\d+$/.test(String(m.version))||!/^[\w.\-]+\.zip$/.test(String(m.file))||!Number.isInteger(m.size)||m.size<1||m.size>80*1048576||!/^[0-9a-f]{64}$/.test(String(m.sha256))||typeof m.sig!=='string')throw new Error('bad manifest');
   if(!__uCheckSig(m,cfg))throw new Error('bad signature');
-  return{version:m.version,file:m.file,size:m.size,sha256:m.sha256,sig:m.sig,notes:String(m.notes||'').slice(0,600)};
+  const notes={};if(typeof m.notes==='string')notes.en=m.notes.slice(0,300);else if(m.notes&&typeof m.notes==='object')for(const k of['en','hu','es','pt','fr'])if(typeof m.notes[k]==='string')notes[k]=m.notes[k].slice(0,300);
+  return{version:m.version,file:m.file,size:m.size,sha256:m.sha256,sig:m.sig,notes};
 }
 async function __uCheck(){
   const S=__UPD.st;S.cur=__uVer();const cfg=__uCfg();S.configured=!!cfg;
@@ -583,7 +584,7 @@ async function __uCheck(){
   try{
     const m=__uMan(await __uGet('https://raw.githubusercontent.com/'+cfg.repo+'/main/updates/version.json',30000),cfg);
     if(__uNewer(m.version,S.cur)){__UPD.man=m;S.latest=m.version;S.notes=m.notes;S.status='available';}
-    else{__UPD.man=null;S.latest=null;S.notes='';S.status='current';}
+    else{__UPD.man=null;S.latest=null;S.notes={};S.status='current';}
   }catch(e){S.status='error';S.err=String(e&&e.message||e).slice(0,120);}
   return S;
 }
@@ -614,7 +615,7 @@ function __uApply(buf,m,cfg){
 }
 async function __uInstall(){
   const S=__UPD.st,cfg=__uCfg(),m=__UPD.man;
-  if(!cfg||!m||__UPD.busy||S.status!=='available')return S;
+  if(!cfg||!m||__UPD.busy||(S.status!=='available'&&S.status!=='error'))return S;
   __UPD.busy=true;S.status='downloading';S.pct=0;S.err='';
   (async()=>{
     try{
@@ -629,8 +630,18 @@ ipcMain.handle('upd:state',()=>{__UPD.st.cur=__uVer();__UPD.st.configured=!!__uC
 ipcMain.handle('upd:check',async()=>({...await __uCheck()}));
 ipcMain.handle('upd:install',async()=>({...await __uInstall()}));
 ipcMain.handle('upd:restart',()=>{if(__UPD.st.status==='ready'){setTimeout(()=>{app.relaunch();app.exit(0);},300);return true;}return false;});
-setTimeout(()=>{__uCheck().catch(()=>{});},12000);
+setTimeout(()=>{__uCheck().catch(()=>{});},5000);
 {const __uiv=setInterval(()=>{__uCheck().catch(()=>{});},6*3600*1000);if(__uiv.unref)__uiv.unref();}
 if(process.env.NRML_UPDATE_DIR){setTimeout(()=>{try{const cf=path.join(app.getPath('appData'),'NRML Client','updates','current.json'),c=JSON.parse(fs.readFileSync(cf,'utf8'));c.boots=0;fs.writeFileSync(cf,JSON.stringify(c));}catch{}},20000);}
 // loadFile() resolves relative paths against the app folder, not against this file: send them to the update folder
 if(process.env.NRML_UPDATE_DIR){try{const {BrowserWindow}=require('electron'),_lf=BrowserWindow.prototype.loadFile;BrowserWindow.prototype.loadFile=function(f,o){try{if(typeof f==='string'&&!path.isAbsolute(f))f=path.join(process.env.NRML_UPDATE_DIR,f);}catch{}return _lf.call(this,f,o);};}catch{}}
+
+// main window: never stay invisible (slow start / second click on the exe)
+try{
+  app.on('browser-window-created',(e,w)=>{setImmediate(()=>{try{
+    if(w!==win)return;
+    const show=()=>{try{if(!w.isDestroyed()&&!w.isVisible()){try{w.maximize();}catch{}w.show();}}catch{}};
+    setTimeout(show,2500);w.webContents.once('did-finish-load',()=>setTimeout(show,400));
+  }catch{}});});
+  app.on('second-instance',()=>{try{if(win&&!win.isDestroyed()){if(win.isMinimized())win.restore();if(!win.isVisible())win.show();win.focus();}}catch{}});
+}catch{}

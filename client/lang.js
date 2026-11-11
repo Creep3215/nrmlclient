@@ -50,3 +50,13 @@ for(const l of ['es','pt','fr'])N[l]=N.en;
 for(const l in N){if(typeof T!=='undefined'&&T[l])Object.assign(T[l],N[l]);}
 })();
 if(typeof module!=='undefined')module.exports={LANGS,T};
+;(function(){
+const N={
+en:{ud_title:'NRML Client {0} is available',ud_sub:'A new version is ready to install.',ud_btn:'Update',ud_later:'Later',ud_h1:'Updating NRML Client',ud_p_dl:'Downloading',ud_p_ver:'Verifying',ud_p_ins:'Installing',ud_p_done:'Done',ud_ready:'Update installed',ud_ready2:'Restart to start version {0}.',ud_restart:'Restart now',ud_err:'Update failed',ud_close:'Close'},
+hu:{ud_title:'Elérhető az NRML Client {0}',ud_sub:'Új verzió telepíthető.',ud_btn:'Frissítés',ud_later:'Később',ud_h1:'NRML Client frissítése',ud_p_dl:'Letöltés',ud_p_ver:'Ellenőrzés',ud_p_ins:'Telepítés',ud_p_done:'Kész',ud_ready:'Frissítés telepítve',ud_ready2:'Indítsd újra a(z) {0} verzió elindításához.',ud_restart:'Újraindítás most',ud_err:'A frissítés nem sikerült',ud_close:'Bezárás'},
+es:{ud_title:'NRML Client {0} está disponible',ud_sub:'Hay una nueva versión lista para instalar.',ud_btn:'Actualizar',ud_later:'Más tarde',ud_h1:'Actualizando NRML Client',ud_p_dl:'Descargando',ud_p_ver:'Verificando',ud_p_ins:'Instalando',ud_p_done:'Listo',ud_ready:'Actualización instalada',ud_ready2:'Reinicia para usar la versión {0}.',ud_restart:'Reiniciar ahora',ud_err:'La actualización falló',ud_close:'Cerrar'},
+pt:{ud_title:'O NRML Client {0} está disponível',ud_sub:'Uma nova versão está pronta para instalar.',ud_btn:'Atualizar',ud_later:'Mais tarde',ud_h1:'Atualizando o NRML Client',ud_p_dl:'Baixando',ud_p_ver:'Verificando',ud_p_ins:'Instalando',ud_p_done:'Concluído',ud_ready:'Atualização instalada',ud_ready2:'Reinicie para usar a versão {0}.',ud_restart:'Reiniciar agora',ud_err:'Falha na atualização',ud_close:'Fechar'},
+fr:{ud_title:'NRML Client {0} est disponible',ud_sub:'Une nouvelle version est prête à être installée.',ud_btn:'Mettre à jour',ud_later:'Plus tard',ud_h1:'Mise à jour de NRML Client',ud_p_dl:'Téléchargement',ud_p_ver:'Vérification',ud_p_ins:'Installation',ud_p_done:'Terminé',ud_ready:'Mise à jour installée',ud_ready2:'Redémarrez pour lancer la version {0}.',ud_restart:'Redémarrer maintenant',ud_err:'Échec de la mise à jour',ud_close:'Fermer'}
+};
+for(const l in N){if(typeof T!=='undefined'&&T[l])Object.assign(T[l],N[l]);}
+})();
