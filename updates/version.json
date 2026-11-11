@@ -1,14 +1,14 @@
 {
-  "version": "2.3.0",
-  "file": "app-2.3.0.zip",
-  "size": 219427,
-  "sha256": "ad42b38850c5fb26e22fd8cb9540c30fb51c92a76067fe5a5d553197e7e41228",
-  "sig": "MHfGsFQaN5DiW8waMFy93SI6NqVj4a45+62qdMcfuVtxQPvZYjEGpV9n22aSClXTYkE4+uMvA6t15Vco/IupDQ==",
+  "version": "2.3.1",
+  "file": "app-2.3.1.zip",
+  "size": 220105,
+  "sha256": "b9b5a189feab51dc84678540e5c12d22d8dd5e154bb45e7f1c23d34847ab911f",
+  "sig": "QSnzed12eJppDrvvIOhkVV/JwkM3uQmuoIWDKlAzeb+csxODKTWVQRDNN+6so/K0e63b3IbRPS7Mzjw6jBVnAg==",
   "notes": {
-    "en": "Fixed the update button, settings version and slow app start. New cinematic updater and a smoother NRML intro.",
-    "hu": "Javítva: az update gomb, a settings verziószáma és az app lassú indulása. Új filmes frissítő animáció és simább NRML intro.",
-    "es": "Corregidos el botón de actualizar, la versión en ajustes y el arranque lento. Nuevo actualizador cinematográfico e intro NRML más fluida.",
-    "pt": "Corrigidos o botão de atualizar, a versão nas configurações e a abertura lenta. Novo atualizador cinematográfico e intro NRML mais suave.",
-    "fr": "Correction du bouton de mise à jour, de la version dans les paramètres et du démarrage lent. Nouvel assistant de mise à jour cinématique et intro NRML plus fluide."
+    "en": "New launcher intro: the line drops and Client is written in smoothly. Starts only when the window is visible.",
+    "hu": "Új indítókép: a csík lecsúszik, a Client szó simán beíródik. Csak akkor indul, amikor az ablak látszik.",
+    "es": "Nueva intro: la línea baja y aparece Client con suavidad. Empieza cuando la ventana es visible.",
+    "pt": "Nova abertura: a linha desce e Client aparece suavemente. Começa quando a janela está visível.",
+    "fr": "Nouvelle intro : la ligne descend et Client apparaît en douceur. Démarre quand la fenêtre est visible."
   }
 }

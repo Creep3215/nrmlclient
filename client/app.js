@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.3.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.3.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -473,3 +473,18 @@ function nxUpdPoll(){
 function nxUpdFix(s){if(!s||!s.cur||NXUP.fixed===s.cur)return;NXUP.fixed=s.cur;
   for(const l in T){if(T[l]&&typeof T[l].st_note==='string')T[l].st_note=T[l].st_note.replace(/NRML Client \d+\.\d+\.\d+/,'NRML Client '+s.cur);}}
 setTimeout(nxUpdPoll,1500);
+
+/* ---- 2.3.1 launcher intro: starts only when the window is really visible; the line drops and "Client" is written in ---- */
+(function(){
+  const sp=document.getElementById('splash');if(!sp)return;
+  sp.dataset.h='1';  // switch off the old fixed-time hide
+  const cli=document.getElementById('spcli');
+  if(cli)cli.innerHTML=[...'Client'].map((c,i)=>'<span style="--i:'+i+'">'+c+'</span>').join('');
+  let started=false;
+  const leave=()=>{sp.classList.add('leave');setTimeout(()=>sp.classList.add('out'),900);setTimeout(()=>{try{sp.remove();}catch{}},1800);};
+  const start=()=>{if(started)return;started=true;sp.classList.add('spgo');setTimeout(leave,3900);};
+  const ready=()=>setTimeout(()=>requestAnimationFrame(()=>requestAnimationFrame(start)),450);
+  if(document.visibilityState==='visible')ready();
+  else document.addEventListener('visibilitychange',function f(){if(document.visibilityState==='visible'){document.removeEventListener('visibilitychange',f);ready();}});
+  setTimeout(()=>{if(!started)start();},9000);  // safety net
+})();
