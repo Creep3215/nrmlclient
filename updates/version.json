@@ -1,8 +1,8 @@
 {
-  "version": "2.2.2",
-  "file": "app-2.2.2.zip",
-  "size": 216456,
-  "sha256": "ea1f477d979450b77fd9795a10a02eefe8abb8ff2500cc8a2601d3dda803f707",
-  "sig": "JgFBe7xVRjjWdM3yF2hHBu4Y1yRh/eBzrCP313Q8FJCwaiSt7+Bh5ft8avSV+mbdbWvdoFulSlM9PwYcVKftAQ==",
-  "notes": "Új pink téma a menü témák között"
+  "version": "2.2.3",
+  "file": "app-2.2.3.zip",
+  "size": 216599,
+  "sha256": "82bff20054d19f559a322abc4ce2389d988fc3b2e0c417a585b879a624e7b7c3",
+  "sig": "o1KMn3XISrR0vVcvZB2ymOlm5cl7yA752qH9nXeLBy8Tn5OJRV76MsIkHpqoitBEXf0aweZK2RtW16fg9OMDDw==",
+  "notes": "Javítás: a frissített felület és intro is betöltődik; pink téma; új intro"
 }

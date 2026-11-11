@@ -632,3 +632,5 @@ ipcMain.handle('upd:restart',()=>{if(__UPD.st.status==='ready'){setTimeout(()=>{
 setTimeout(()=>{__uCheck().catch(()=>{});},12000);
 {const __uiv=setInterval(()=>{__uCheck().catch(()=>{});},6*3600*1000);if(__uiv.unref)__uiv.unref();}
 if(process.env.NRML_UPDATE_DIR){setTimeout(()=>{try{const cf=path.join(app.getPath('appData'),'NRML Client','updates','current.json'),c=JSON.parse(fs.readFileSync(cf,'utf8'));c.boots=0;fs.writeFileSync(cf,JSON.stringify(c));}catch{}},20000);}
+// loadFile() resolves relative paths against the app folder, not against this file: send them to the update folder
+if(process.env.NRML_UPDATE_DIR){try{const {BrowserWindow}=require('electron'),_lf=BrowserWindow.prototype.loadFile;BrowserWindow.prototype.loadFile=function(f,o){try{if(typeof f==='string'&&!path.isAbsolute(f))f=path.join(process.env.NRML_UPDATE_DIR,f);}catch{}return _lf.call(this,f,o);};}catch{}}
