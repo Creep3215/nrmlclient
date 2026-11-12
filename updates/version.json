@@ -1,14 +1,14 @@
 {
-  "version": "2.5.0",
-  "file": "app-2.5.0.zip",
-  "size": 223837,
-  "sha256": "935fcb566c1af7cab4efd5fe749195467b56d7beefc4d7759a493535f4f8534f",
-  "sig": "WgbzfHX3P5xEaWjaIwOJELYK+OGXzeda4Xwk2burhdBR/WUnwkmH6ZnsBo62zN88BRc2Hu0JI0SzpiSfObrZCQ==",
+  "version": "2.5.1",
+  "file": "app-2.5.1.zip",
+  "size": 223842,
+  "sha256": "f62fa1bd454c549fc25c3bf94c411c92091f40a767a98c74e6b353e49881fa1f",
+  "sig": "/8WxbiaTa4nv5tWUidM2livlLmL7KJCSNdKF654XKlXPovj2vayBbJdlxUYbjNmvxj2CDUVEPkmpscHJQPKYCA==",
   "notes": {
-    "en": "Smooth cinematic profile switching, and a new animation when a profile is created or imported.",
-    "hu": "Simább, filmes profilváltás, és új animáció profil létrehozásakor és importálásakor.",
-    "es": "Cambio de perfil fluido y cinematográfico, y nueva animación al crear o importar un perfil.",
-    "pt": "Troca de perfil suave e cinematográfica, e nova animação ao criar ou importar um perfil.",
-    "fr": "Changement de profil fluide et cinématique, et nouvelle animation à la création ou l’import d’un profil."
+    "en": "Fixed: the intro logo and the launch loader are now exactly centered.",
+    "hu": "Javítva: az indítókép logója és a Minecraft-indító töltőkör mostantól pontosan középen van.",
+    "es": "Corregido: el logo de la intro y el cargador de inicio ahora están perfectamente centrados.",
+    "pt": "Corrigido: o logo da abertura e o carregador de inicialização agora estão perfeitamente centralizados.",
+    "fr": "Corrigé : le logo d’intro et le chargeur de lancement sont désormais parfaitement centrés."
   }
 }

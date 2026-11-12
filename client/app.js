@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.5.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.5.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -498,7 +498,7 @@ function nxLcOpen(){
   clearTimeout(NXL.t);clearTimeout(NXL.fb);NXL.open=true;NXL.ok=false;
   const e=nxLcEl(),src=[...document.querySelectorAll('[data-play]')].find(b=>b.offsetParent!==null),r=src?src.getBoundingClientRect():{left:innerWidth/2-60,top:innerHeight/2-20,width:120,height:40};
   const cs=src?getComputedStyle(src):null,label=src?(src.textContent||'').trim():'PLAY';
-  const R=66,cx=innerWidth/2,cy=innerHeight/2-110+66,d=84;
+  const R=66,cx=innerWidth/2,cy=innerHeight/2,d=84;
   e.className='';
   e.innerHTML='<div class="lc-bd"></div>'
     +'<div class="lc-fly" style="left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;border-radius:'+(cs?cs.borderRadius:'0')+'"><span class="lc-t">'+esc(label)+'</span><span class="lc-pl">'+I.play+'</span></div>'
