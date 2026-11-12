@@ -1,14 +1,14 @@
 {
-  "version": "2.4.0",
-  "file": "app-2.4.0.zip",
-  "size": 222492,
-  "sha256": "9a71b1ac4c5079df1a08e1d81db28b1e09099f4d0ecc744efc37d2f0d72c2f18",
-  "sig": "PaFppjcj/HlU0dPfp+NAHtvqTMkMAjg/ZrYL+x42C1RZeuByjS2OYMu1dA/ThIM0jktbNpEopvhYWRgCs57BCA==",
+  "version": "2.5.0",
+  "file": "app-2.5.0.zip",
+  "size": 223837,
+  "sha256": "935fcb566c1af7cab4efd5fe749195467b56d7beefc4d7759a493535f4f8534f",
+  "sig": "WgbzfHX3P5xEaWjaIwOJELYK+OGXzeda4Xwk2burhdBR/WUnwkmH6ZnsBo62zN88BRc2Hu0JI0SzpiSfObrZCQ==",
   "notes": {
-    "en": "New Play animation: the button flies to the centre and becomes a loader with live status and a Cancel launch button. Much smoother update animation.",
-    "hu": "Új Play animáció: a gomb középre repül és töltőkörré alakul élő állapottal és Indítás megszakítása gombbal. Sokkal simább frissítés-animáció.",
-    "es": "Nueva animación de Jugar: el botón vuela al centro y se convierte en un cargador con estado en vivo y botón Cancelar. Animación de actualización mucho más fluida.",
-    "pt": "Nova animação de Jogar: o botão voa para o centro e vira um carregador com status ao vivo e botão Cancelar. Animação de atualização bem mais suave.",
-    "fr": "Nouvelle animation Jouer : le bouton vole au centre et devient un chargeur avec statut en direct et bouton Annuler. Animation de mise à jour bien plus fluide."
+    "en": "Smooth cinematic profile switching, and a new animation when a profile is created or imported.",
+    "hu": "Simább, filmes profilváltás, és új animáció profil létrehozásakor és importálásakor.",
+    "es": "Cambio de perfil fluido y cinematográfico, y nueva animación al crear o importar un perfil.",
+    "pt": "Troca de perfil suave e cinematográfica, e nova animação ao criar ou importar um perfil.",
+    "fr": "Changement de profil fluide et cinématique, et nouvelle animation à la création ou l’import d’un profil."
   }
 }
