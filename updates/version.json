@@ -1,14 +1,14 @@
 {
-  "version": "2.6.0",
-  "file": "app-2.6.0.zip",
-  "size": 226167,
-  "sha256": "a68b81a2b49e064aafcf65ec614b19403dabccf27c67c38718421dca5f8f3934",
-  "sig": "rOtSP4QEVRVLxLiRf07BCuZQIRygWYBG+sB9VgLDSm61eUQuvalQvkV0oU6wmLHqIFauZDJwvVfUhQVfplisDA==",
+  "version": "2.6.1",
+  "file": "app-2.6.1.zip",
+  "size": 226612,
+  "sha256": "39b37379df88685aa34bc787c7ad73da7359f203c7038e02dbb63ed388f3bc9c",
+  "sig": "59hrYUtVDMuexSjjMA3bYNVajMKexfxlFTUJQEEWKuKYOk2ijCdx/rTvXKGLrNtY0CSQsTkF21Mvj9voqzouAQ==",
   "notes": {
-    "en": "Smoother profile switching with no flicker, new profile reveal animation, one-piece intro exit, recently updated mods stay on top for 5 minutes, faster update checks and lower RAM use.",
-    "hu": "Simább, villogásmentes profilváltás, új profil-megjelenítő animáció, egyben kimenő intro, nemrég frissített modok 5 percig felül maradnak, gyorsabb frissítés-keresés és kisebb RAM-használat.",
-    "es": "Cambio de perfil más suave sin parpadeos, nueva animación de perfil, salida de intro en una pieza, mods actualizados recientemente arriba 5 minutos, búsqueda de actualizaciones más rápida y menos RAM.",
-    "pt": "Troca de perfil mais suave sem piscar, nova animação de perfil, saída da abertura em uma peça, mods atualizados recentemente no topo por 5 minutos, verificação de atualizações mais rápida e menos RAM.",
-    "fr": "Changement de profil plus fluide sans scintillement, nouvelle animation de profil, sortie d’intro d’un seul tenant, mods récemment mis à jour en haut pendant 5 minutes, vérification des mises à jour plus rapide et moins de RAM."
+    "en": "Taskbar: the client now registers itself as NRML Client with its own logo. Unpin the old icon and pin it again.",
+    "hu": "Tálca: a kliens mostantól NRML Client néven és saját logóval jelentkezik be. Vedd le a régi ikont, és tűzd ki újra.",
+    "es": "Barra de tareas: el cliente ahora se registra como NRML Client con su propio logo. Desancla el icono antiguo y vuelve a anclarlo.",
+    "pt": "Barra de tarefas: o cliente agora se registra como NRML Client com seu próprio logo. Desafixe o ícone antigo e fixe novamente.",
+    "fr": "Barre des tâches : le client s’enregistre désormais sous le nom NRML Client avec son propre logo. Détachez l’ancienne icône et épinglez-la à nouveau."
   }
 }

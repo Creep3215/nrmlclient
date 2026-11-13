@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.6.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.6.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====

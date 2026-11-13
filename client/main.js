@@ -672,3 +672,19 @@ try{app.on('browser-window-created',(e,w)=>{setImmediate(()=>{try{if(w!==win)ret
   w.webContents.on('did-finish-load',()=>later(20000));
 }catch{}});});}catch{}
 ipcMain.handle('mem:trim',()=>{setTimeout(__trim,8000);return true;});
+
+// ---- 2.6.1 taskbar branding: Start-menu shortcut + repair existing pinned shortcut (name/icon "NRML Client" instead of Electron) ----
+try{if(process.platform==='win32'){app.whenReady().then(()=>setTimeout(()=>{try{
+  const AU='com.nermal.nrmlclient',base=path.join(app.getPath('appData'),'NRML Client');fs.mkdirSync(base,{recursive:true});
+  const ico=path.join(base,'icon.ico');try{fs.copyFileSync(path.join(__dirname,'icon.ico'),ico);}catch{}
+  if(!fs.existsSync(ico))return;
+  const exe=process.execPath,opt={target:exe,cwd:path.dirname(exe),description:'NRML Client',icon:ico,iconIndex:0,appUserModelId:AU};
+  const sm=path.join(app.getPath('appData'),'Microsoft','Windows','Start Menu','Programs','NRML Client.lnk');
+  try{shell.writeShortcutLink(sm,'create',opt);}catch{}
+  const pd=path.join(app.getPath('appData'),'Microsoft','Internet Explorer','Quick Launch','User Pinned','TaskBar');
+  let fl=[];try{fl=fs.readdirSync(pd);}catch{}
+  for(const f of fl){if(!/\.lnk$/i.test(f))continue;const p=path.join(pd,f);
+    try{const s=shell.readShortcutLink(p);
+      if(s&&s.target&&path.resolve(s.target).toLowerCase()===path.resolve(exe).toLowerCase()&&(s.icon!==ico||s.appUserModelId!==AU||s.description!=='NRML Client'))
+        shell.writeShortcutLink(p,'update',{icon:ico,iconIndex:0,appUserModelId:AU,description:'NRML Client'});}catch{}}
+}catch{}},8000));}}catch{}
