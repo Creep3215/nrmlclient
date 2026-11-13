@@ -1,7 +1,7 @@
 {
   "name": "nrml-client",
   "productName": "NRML Client",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "NRML Client (Developed by Nermal)",
   "main": "loader.js",
   "dependencies": {

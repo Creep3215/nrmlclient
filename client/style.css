@@ -433,13 +433,20 @@ body.dr-on #dr .dr-pill{animation:nxPop .4s .12s var(--ease) both}
 #pane.nx-out{opacity:0;transform:translateX(-14px);pointer-events:none}
 #pane.nx-in{animation:none}
 #pane.nx-in>*{animation:none}
-#pane.nx-in .phead>div:first-child{animation:pfUp .6s var(--ease) both}
-#pane.nx-in .acts{animation:pfUp .6s .07s var(--ease) both}
-#pane.nx-in .facts>div{animation:pfUp .6s var(--ease) both}
-#pane.nx-in .facts>div:nth-child(1){animation-delay:.12s}#pane.nx-in .facts>div:nth-child(2){animation-delay:.17s}#pane.nx-in .facts>div:nth-child(3){animation-delay:.22s}#pane.nx-in .facts>div:nth-child(4){animation-delay:.27s}
-#pane.nx-in .tabs{animation:pfUp .6s .32s var(--ease) both}
-#pane.nx-in .frow{animation:pfUp .5s var(--ease) both}
-#pane.nx-in .frow:nth-child(1){animation-delay:.38s}#pane.nx-in .frow:nth-child(2){animation-delay:.42s}#pane.nx-in .frow:nth-child(3){animation-delay:.46s}#pane.nx-in .frow:nth-child(4){animation-delay:.5s}#pane.nx-in .frow:nth-child(5){animation-delay:.54s}#pane.nx-in .frow:nth-child(n+6){animation-delay:.58s}
+#pane.nx-in .facts{perspective:800px}
+#pane.nx-in .phead>div:first-child{animation:pfWipe .75s var(--ease) both}
+#pane.nx-in .acts>*{animation:pfPop .55s var(--ease) both}
+#pane.nx-in .acts>*:nth-child(2){animation-delay:.06s}#pane.nx-in .acts>*:nth-child(3){animation-delay:.12s}
+#pane.nx-in .facts>div{transform-origin:50% 0;animation:pfFlip .7s var(--ease) both}
+#pane.nx-in .facts>div:nth-child(1){animation-delay:.14s}#pane.nx-in .facts>div:nth-child(2){animation-delay:.22s}#pane.nx-in .facts>div:nth-child(3){animation-delay:.3s}#pane.nx-in .facts>div:nth-child(4){animation-delay:.38s}
+#pane.nx-in .tabs{animation:pfFade .5s .35s ease both}
+#pane.nx-in .frow{animation:pfSide .55s var(--ease) both}
+#pane.nx-in .frow:nth-child(1){animation-delay:.45s}#pane.nx-in .frow:nth-child(2){animation-delay:.5s}#pane.nx-in .frow:nth-child(3){animation-delay:.55s}#pane.nx-in .frow:nth-child(4){animation-delay:.6s}#pane.nx-in .frow:nth-child(5){animation-delay:.65s}#pane.nx-in .frow:nth-child(6){animation-delay:.7s}#pane.nx-in .frow:nth-child(n+7){animation-delay:.75s}
+@keyframes pfWipe{from{clip-path:inset(0 100% 0 0);opacity:.2;transform:translateX(-12px)}to{clip-path:inset(0 0 0 0);opacity:1;transform:none}}
+@keyframes pfPop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+@keyframes pfFlip{from{opacity:0;transform:rotateX(-75deg)}to{opacity:1;transform:none}}
+@keyframes pfFade{from{opacity:0}to{opacity:1}}
+@keyframes pfSide{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
 @keyframes pfUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .prow{transition:background-color .3s}
 .prow.nx-new{animation:pfNew 1.5s var(--ease) both}
@@ -464,3 +471,28 @@ body.dr-on #dr .dr-pill{animation:nxPop .4s .12s var(--ease) both}
 #nxprof .pf-h{font:700 13px "Cascadia Mono",Consolas,monospace;letter-spacing:.4em;text-transform:uppercase;color:var(--acc,#ff5a1f);padding-left:.4em;opacity:0;transform:translateY(12px)}
 #nxprof .pf-n{font:700 30px var(--disp);color:#e9e6df;max-width:80vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0;transform:translateY(14px)}
 #nxprof.on .pf-h{animation:pfUp .7s 1s var(--ease) forwards}#nxprof.on .pf-n{animation:pfUp .7s 1.15s var(--ease) forwards}
+
+/* sidebar: no re-animation after first paint, smooth highlight */
+#rows.rd .prow,#rows.rd .prow.on{animation:none}
+#rows.rd .prow.nx-new{animation:pfNew 1.5s var(--ease) both}
+.prow .go{transition:opacity .3s}
+.prow{transition:background-color .35s}
+/* recently updated mods */
+.frow.nx{position:relative}
+.frow.nx.rcnt{background:linear-gradient(90deg,rgba(255,90,31,.12),transparent 65%)}
+.frow.nx .rtag{font:700 9px "Cascadia Mono",Consolas,monospace;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);padding:1px 5px;margin-left:10px;vertical-align:middle}
+.frow.nx .rtag.lv{animation:rtp 1.2s ease-in-out infinite}@keyframes rtp{50%{opacity:.35}}
+.frow.nx .rp{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.08);overflow:hidden}
+.frow.nx .rp u{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:var(--acc);transition:transform .3s linear}
+/* intro 2.6.0: one smooth exit, the line shrinks to the width of "Client" and stays */
+.sp-sub .sp-line{transform-origin:50% 50%}
+#splash.spgo .sp-sub .sp-line{animation:line .8s .3s var(--ease) forwards,lineShrink .9s 1.35s cubic-bezier(.65,0,.25,1) forwards}
+@keyframes lineShrink{to{transform:scaleX(var(--cs,.4))}}
+.sp-cli{top:18px}
+#splash.spgo .sp-cli span{animation-delay:calc(1.85s + var(--i)*.1s)}
+.sp-in{transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .7s ease}
+#splash.leave .sp-in{transform:translateY(-12px);opacity:0}
+#splash.leave .sp-word span{animation:none}
+#splash.leave .sp-sub .sp-line{animation:none;opacity:1;width:100%;transform:scaleX(var(--cs,.4))}
+#splash.leave .sp-cli span{animation:none;opacity:1;transform:none}
+#splash.out{clip-path:none;opacity:0}

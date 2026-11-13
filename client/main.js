@@ -40,7 +40,7 @@ const ROOT=path[_0x5dd4ae(0x372)](app[_0x5dd4ae(0x186)](_0x5dd4ae(0x228)),_0x5dd
     optimize:a=>{id(a[0]);},
     finfo:a=>{id(a[0]);oneOf(a[1],DIRS);},fmeta:a=>{id(a[0]);oneOf(a[1],DIRS);},
     fdetail:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},freveal:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},
-    sysinfo:none,pbackup:a=>id(a[0]),'launch:begin':none,'launch:cancel':none,'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
+    sysinfo:none,pbackup:a=>id(a[0]),'mem:trim':none,'launch:begin':none,'launch:cancel':none,'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
     'theme:save':a=>{const o=a[0];obj(o);id(o.id);bool(o.on);for(const k of Object.keys(o))if(!['id','on','preset','blur','speed','bright','zoom','custom','faces','prev','btn','anim','logo','splash','font','static','accent','ui'].includes(k))bad();
       str(o.preset,20,true);for(const k of ['blur','speed','bright','zoom'])if(o[k]!=null&&!Number.isFinite(o[k]))bad();
       if(o.faces!=null){if(!Array.isArray(o.faces)||o.faces.length!==6)bad();o.faces.forEach(f=>str(f,3500000));}str(o.prev,200000,true);str(o.accent,7,true);for(const k of ['btn','anim','logo','splash','font','static'])if(o[k]!=null)bool(o[k]);if(o.ui!=null){obj(o.ui);for(const k of Object.keys(o.ui)){if(!['button','buttonH','buttonD','logo','edition','bg'].includes(k))bad();str(o.ui[k],k==='bg'?12000000:2500000);}}},
@@ -582,7 +582,7 @@ async function __uCheck(){
   if(S.status==='downloading'||S.status==='ready')return S;
   S.status='checking';S.err='';
   try{
-    const m=__uMan(await __uGet('https://raw.githubusercontent.com/'+cfg.repo+'/main/updates/version.json',30000),cfg);
+    const m=__uMan(await __uGet('https://raw.githubusercontent.com/'+cfg.repo+'/main/updates/version.json?c='+Date.now(),30000),cfg);
     if(__uNewer(m.version,S.cur)){__UPD.man=m;S.latest=m.version;S.notes=m.notes;S.status='available';}
     else{__UPD.man=null;S.latest=null;S.notes={};S.status='current';}
   }catch(e){S.status='error';S.err=String(e&&e.message||e).slice(0,120);}
@@ -631,7 +631,9 @@ ipcMain.handle('upd:check',async()=>({...await __uCheck()}));
 ipcMain.handle('upd:install',async()=>({...await __uInstall()}));
 ipcMain.handle('upd:restart',()=>{if(__UPD.st.status==='ready'){setTimeout(()=>{app.relaunch();app.exit(0);},300);return true;}return false;});
 setTimeout(()=>{__uCheck().catch(()=>{});},5000);
-{const __uiv=setInterval(()=>{__uCheck().catch(()=>{});},6*3600*1000);if(__uiv.unref)__uiv.unref();}
+{const __uiv=setInterval(()=>{__uCheck().catch(()=>{});},10*60*1000);if(__uiv.unref)__uiv.unref();}
+let __uLast=Date.now();
+app.on('browser-window-focus',()=>{if(Date.now()-__uLast>60000&&__UPD.st.status!=='downloading'&&__UPD.st.status!=='ready'){__uLast=Date.now();__uCheck().catch(()=>{});}});
 if(process.env.NRML_UPDATE_DIR){setTimeout(()=>{try{const cf=path.join(app.getPath('appData'),'NRML Client','updates','current.json'),c=JSON.parse(fs.readFileSync(cf,'utf8'));c.boots=0;fs.writeFileSync(cf,JSON.stringify(c));}catch{}},20000);}
 // loadFile() resolves relative paths against the app folder, not against this file: send them to the update folder
 if(process.env.NRML_UPDATE_DIR){try{const {BrowserWindow}=require('electron'),_lf=BrowserWindow.prototype.loadFile;BrowserWindow.prototype.loadFile=function(f,o){try{if(typeof f==='string'&&!path.isAbsolute(f))f=path.join(process.env.NRML_UPDATE_DIR,f);}catch{}return _lf.call(this,f,o);};}catch{}}
@@ -654,3 +656,19 @@ try{const _cp=require('child_process'),_sp2=_cp.spawn;
   _cp.spawn=function(cmd){const c=_sp2.apply(this,arguments);try{if(__LC.cancelled&&/java/i.test(String(cmd)))setTimeout(()=>{try{c.kill();}catch{}},0);}catch{}return c;};}catch{}
 try{app.on('browser-window-created',(e,w)=>{setImmediate(()=>{try{if(w!==win)return;const _ws=w.webContents.send.bind(w.webContents);
   w.webContents.send=function(ch,...a){if(__LC.cancelled&&ch==='crashed')return;return _ws(ch,...a);};}catch{}});});}catch{}
+
+// ---- 2.6.0 low memory mode ----
+try{app.commandLine.appendSwitch('js-flags','--max-lazy --max-old-space-size=256 --expose-gc');
+  app.commandLine.appendSwitch('disable-features','SpareRendererForSitePerProcess,OptimizationHints,MediaRouter,Translate,AutofillServerCommunication,CalculateNativeWinOcclusion');}catch{}
+function __trim(){try{
+  if(win&&!win.isDestroyed()){win.webContents.session.clearCache().catch(()=>{});win.webContents.executeJavaScript('window.gc&&window.gc()',true).catch(()=>{});}
+  if(typeof global.gc==='function')global.gc();
+  for(const k of Object.keys(__UPC||{})){if(Date.now()-__UPC[k].t>600000)delete __UPC[k];}
+}catch{}}
+{const iv=setInterval(__trim,4*60*1000);if(iv.unref)iv.unref();}
+try{app.on('browser-window-created',(e,w)=>{setImmediate(()=>{try{if(w!==win)return;
+  let tm=null;const later=ms=>{clearTimeout(tm);tm=setTimeout(__trim,ms);};
+  w.on('minimize',()=>later(15000));w.on('blur',()=>later(45000));w.on('hide',()=>later(10000));
+  w.webContents.on('did-finish-load',()=>later(20000));
+}catch{}});});}catch{}
+ipcMain.handle('mem:trim',()=>{setTimeout(__trim,8000);return true;});

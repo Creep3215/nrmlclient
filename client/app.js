@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.5.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.6.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -483,8 +483,8 @@ setTimeout(nxUpdPoll,1500);
   const cli=document.getElementById('spcli');
   if(cli)cli.innerHTML=[...'Client'].map((c,i)=>'<span style="--i:'+i+'">'+c+'</span>').join('');
   let started=false;
-  const leave=()=>{sp.classList.add('leave');setTimeout(()=>sp.classList.add('out'),900);setTimeout(()=>{try{sp.remove();}catch{}},1800);};
-  const start=()=>{if(started)return;started=true;sp.classList.add('spgo');setTimeout(leave,3900);};
+  const leave=()=>{sp.classList.add('leave');setTimeout(()=>sp.classList.add('out'),820);setTimeout(()=>{try{sp.remove();}catch{}},1700);};
+  const start=()=>{if(started)return;started=true;try{const sb=sp.querySelector('.sp-sub').getBoundingClientRect(),ss=cli.querySelectorAll('span'),f=ss[0].getBoundingClientRect(),l=ss[ss.length-1].getBoundingClientRect(),w=l.right-f.left-parseFloat(getComputedStyle(cli).fontSize)*.62;if(sb.width>0&&w>0)sp.style.setProperty('--cs',Math.min(1,(w+6)/sb.width).toFixed(3));}catch{}sp.classList.add('spgo');setTimeout(leave,4100);};
   const ready=()=>setTimeout(()=>requestAnimationFrame(()=>requestAnimationFrame(start)),450);
   if(document.visibilityState==='visible')ready();
   else document.addEventListener('visibilitychange',function f(){if(document.visibilityState==='visible'){document.removeEventListener('visibilitychange',f);ready();}});
@@ -528,7 +528,7 @@ function nxLcStatus(m){
   if(k==='run')nxLcDone();
 }
 function nxLcDone(){
-  if(NXL.ok)return;NXL.ok=true;const e=document.getElementById('nxlaunch');if(!e)return;
+  if(NXL.ok)return;NXL.ok=true;try{A('mem:trim');}catch{}const e=document.getElementById('nxlaunch');if(!e)return;
   e.classList.add('ok');NXL.st.textContent=t('lc_ready');NXL.dt.textContent='';NXL.bar.classList.remove('ind');NXL.u.style.transform='scaleX(1)';
   NXL.fb=setTimeout(nxLcHide,1500);
 }
@@ -590,3 +590,43 @@ function nxProfDone(id){
     if(row){row.classList.add('nx-new');try{row.scrollIntoView({block:'nearest',behavior:'smooth'});}catch{}setTimeout(()=>row.classList.remove('nx-new'),1800);}
     setTimeout(()=>{e.remove();NXP.busy=false;},600);},2300);
 }
+
+
+/* ---- 2.6.0 sidebar without flicker; recently updated mods ---- */
+{const _dr=drawRows;drawRows=function(){
+  const rows=document.getElementById('rows');
+  if(rows&&NXP.sw&&rows.querySelector('.prow[data-id]')){   // profile switch: just move the highlight, do not rebuild
+    rows.querySelectorAll('.prow').forEach(r=>r.classList.toggle('on',r.dataset.id===cur));return;}
+  const r=_dr.apply(this,arguments);
+  const rw=document.getElementById('rows');if(rw&&!rw.classList.contains('rd')&&!rw.dataset.w){rw.dataset.w='1';setTimeout(()=>rw.classList.add('rd'),1100);}
+  return r;};}
+const NXREC={upd:null,n:-1};
+function nxRecGet(pid){try{const a=JSON.parse(localStorage.getItem('nrml.rec')||'{}'),o=a[pid]||{},now=Date.now();let ch=false;for(const k in o)if(now-o[k]>300000){delete o[k];ch=true;}if(ch){a[pid]=o;localStorage.setItem('nrml.rec',JSON.stringify(a));}return o;}catch{return{};}}
+function nxRecSet(pid,f){try{const a=JSON.parse(localStorage.getItem('nrml.rec')||'{}');(a[pid]=a[pid]||{})[f]=Date.now();localStorage.setItem('nrml.rec',JSON.stringify(a));}catch{}}
+function nxRecDecorate(){
+  const box=document.getElementById('flist');if(!box||tab!=='mods')return;
+  const rec=nxRecGet(cur),u=NXREC.upd&&NXREC.upd.pid===cur?NXREC.upd:null;NXREC.n=Object.keys(rec).length;
+  const rows=[...box.querySelectorAll('.frow.nx')].filter(r=>rec[r.dataset.f]||(u&&u.act(r)));
+  rows.sort((x,y)=>(rec[y.dataset.f]||Infinity)-(rec[x.dataset.f]||Infinity));
+  for(const r of rows.reverse()){
+    const live=!rec[r.dataset.f]&&u,b=r.querySelector('.n b');
+    r.classList.add('rcnt');if(live)r.classList.add('rup');
+    if(b)b.insertAdjacentHTML('beforeend','<em class="rtag'+(live?' lv':'')+'">'+esc(t(live?'rc_up':'rc_tag'))+'</em>');
+    if(live)r.insertAdjacentHTML('beforeend','<i class="rp"><u style="transform:scaleX('+(u.pct/100)+')"></u></i>');
+    box.insertBefore(r,box.firstChild);}
+}
+{const _np=nxPaint;nxPaint=function(){const r=_np.apply(this,arguments);try{nxRecDecorate();}catch{}return r;};}
+{const _um=updMods;updMods=async function(){
+  if(running)return _um.apply(this,arguments);
+  const pid=cur;let nm=[];try{const r=await A('mods:check',pid);nm=((r&&r.names)||[]).map(x=>String(x).toLowerCase());}catch{}
+  const before=new Set((FILES&&FILES.mods)||[]);
+  const U=NXREC.upd={pid,nm,pct:3,act:r=>{const b=((r.querySelector('.n b')||{}).textContent||'').toLowerCase().replace(/\s+/g,' ').trim();return !!b&&nm.some(x=>b===x||b.includes(x)||x.includes(b));}};
+  const diff=async()=>{try{const f=await A('flist',pid);if(cur!==pid)return;const add=(f.mods||[]).filter(n=>!before.has(n)&&!/\.disabled$/i.test(n));
+    if(add.length){add.forEach(n=>{before.add(n);nxRecSet(pid,n);});FILES=f;nxPaint(true);}}catch{}};
+  nxPaint(true);
+  const tk=setInterval(()=>{U.pct+=(92-U.pct)*.05;document.querySelectorAll('#flist .rp u').forEach(u=>u.style.transform='scaleX('+(U.pct/100)+')');},250);
+  const pl=setInterval(diff,1000);
+  try{return await _um.apply(this,arguments);}
+  finally{clearInterval(tk);clearInterval(pl);await diff();NXREC.upd=null;try{nxPaint(true);}catch{}}
+};}
+setInterval(()=>{try{if(tab==='mods'&&document.getElementById('flist')&&Object.keys(nxRecGet(cur)).length!==NXREC.n)nxPaint(true);}catch{}},15000);
