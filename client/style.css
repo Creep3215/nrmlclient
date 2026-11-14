@@ -518,3 +518,5 @@ body.dr-on #dr .dr-pill{animation:nxPop .4s .12s var(--ease) both}
 .nxv em.st.ok{color:#6fd98a}.nxv em.st.upd{color:#f0b24a}.nxv em.st.none{color:#ef6b6b}.nxv em.st.unk{opacity:.5}
 .nxsum span{margin-right:14px}.nxsum .ok{color:#6fd98a}.nxsum .up{color:#f0b24a}.nxsum .no{color:#ef6b6b}
 .nxck{display:flex;gap:6px;align-items:center;margin:8px 0}
+
+.nxmr{padding:6px 10px;border-radius:8px;white-space:nowrap}

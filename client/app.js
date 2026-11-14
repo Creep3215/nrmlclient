@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.7.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.7.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -639,11 +639,17 @@ function nxSbAdd(){
   const b=document.getElementById('tbar');if(!b||b.querySelector('#nxq'))return;
   const ty=TYPE[tab]||'mod',o=[['mod','sr_mod'],['shader','sr_shd'],['resourcepack','sr_rp'],['modpack','sr_mp']];
   const w=document.createElement('span');w.className='nxsb';
-  w.innerHTML='<select id="nxst" onchange="nxSGo()">'+o.map(x=>'<option value="'+x[0]+'"'+(x[0]===ty?' selected':'')+'>'+esc(t(x[1]))+'</option>').join('')+'</select><input id="nxq" type="text" autocomplete="off" placeholder="'+esc(t('sr_ph'))+'" oninput="nxSTyp()" onkeydown="if(event.key===\'Enter\')nxSGo()"><div id="nxsr"></div>';
+  w.innerHTML='<select id="nxst" onchange="nxSGo()">'+o.map(x=>'<option value="'+x[0]+'"'+(x[0]===ty?' selected':'')+'>'+esc(t(x[1]))+'</option>').join('')+'</select><input id="nxq" type="text" autocomplete="off" placeholder="'+esc(t('sr_ph'))+'" oninput="nxFilt()" onkeydown="if(event.key===\'Enter\')nxSGo()"><button class="nxmr" onclick="nxSGo()" title="Modrinth">Modrinth</button><div id="nxsr"></div>';
   b.insertBefore(w,b.firstChild);
   if(tab==='mods'){const y=document.createElement('button');y.className='nxsy';y.textContent='⇄ '+t('sy_btn');y.onclick=()=>nxSync();b.insertBefore(y,w.nextSibling);}
 }
-function nxSTyp(){clearTimeout(NXS.tm);NXS.tm=setTimeout(nxSGo,380);}
+function nxFilt(){
+  const q=((document.getElementById('nxq')||{}).value||'').trim().toLowerCase(),L=document.getElementById('flist');if(!L)return;
+  let n=0;L.querySelectorAll('.frow').forEach(r=>{const m=!q||((r.dataset.f||'')+' '+r.textContent).toLowerCase().includes(q);r.style.display=m?'':'none';if(m)n++;});
+  let e=document.getElementById('nxno');
+  if(q&&!n){if(!e){e=document.createElement('div');e.id='nxno';e.className='nxe';L.parentNode.insertBefore(e,L.nextSibling);}e.textContent=t('sr_nofile');}else if(e)e.remove();
+}
+(function(){const _p=nxPaint;nxPaint=function(){const r=_p.apply(this,arguments);try{nxFilt();}catch{}return r;};})();
 async function nxSGo(){
   const q=(document.getElementById('nxq')||{}).value||'',box=document.getElementById('nxsr');if(!box)return;
   if(!q.trim()){box.classList.remove('on');box.innerHTML='';return;}
@@ -693,3 +699,4 @@ async function nxSyncGo(){
     try{await load();}catch{}try{refreshFiles();}catch{}
   }catch(e){fail(e);}
 }
+(function(){const _d=drawFiles;drawFiles=function(){const r=_d.apply(this,arguments);try{nxFilt();}catch{}return r;};})();

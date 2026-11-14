@@ -1,14 +1,14 @@
 {
-  "version": "2.7.0",
-  "file": "app-2.7.0.zip",
-  "size": 232195,
-  "sha256": "b31ac5dce5d5ece521364696bb5ef9ea1961583a1e31b37700900b5eb73a9a48",
-  "sig": "6cRv+kgUZe65FhzyWOQ4BxIP+zga4xcjTtecxsOiCBbwmhl/NNMrtTYtoY8ByfFUFnBQIlBvr1bJweeHWx28Dg==",
+  "version": "2.7.1",
+  "file": "app-2.7.1.zip",
+  "size": 232463,
+  "sha256": "e40870355476bd111ed595b0999b67359cecc1990e2a3566309c948e737b3694",
+  "sig": "0WjbFKXsiR5TxTubcEU9rPQh1cVYs981Hzue1EPqU1Jk1koi0pPSKkQqJDvWtxtIPIGgHRRToWfOM2oWKZ9CBw==",
   "notes": {
-    "en": "New: search mods, shaders, resource packs and modpacks in every profile, pick any version (roll back), and a Sync compatibility button that updates every mod to the newest version supporting the chosen Minecraft version.",
-    "hu": "Új: kereső minden profilban (mod, shader, resource pack, modpack), tetszőleges verzió telepítése (visszalépés is), és Összehangolás gomb, ami minden modot a választott Minecraft verziót támogató legfrissebb verzióra frissít.",
-    "es": "Nuevo: búsqueda de mods, shaders, paquetes de recursos y modpacks en cada perfil, elige cualquier versión (volver atrás) y un botón de sincronizar compatibilidad que actualiza cada mod a la versión más reciente compatible.",
-    "pt": "Novo: busca de mods, shaders, pacotes de recursos e modpacks em cada perfil, escolha qualquer versão (voltar atrás) e um botão de sincronizar compatibilidade que atualiza cada mod para a versão mais recente compatível.",
-    "fr": "Nouveau : recherche de mods, shaders, packs de ressources et modpacks dans chaque profil, choix de version (retour arrière) et bouton de synchronisation qui met chaque mod à la dernière version compatible."
+    "en": "Search box now filters the mods/shaders/packs already in the profile as you type (Enter or the Modrinth button searches Modrinth).",
+    "hu": "A kereső mostantól gépelés közben szűri a profilban lévő modokat/shadereket/csomagokat (Enter vagy a Modrinth gomb: keresés a Modrinthen).",
+    "es": "El buscador ahora filtra al instante los mods/shaders/paquetes del perfil (Enter o el botón Modrinth busca en Modrinth).",
+    "pt": "A busca agora filtra na hora os mods/shaders/pacotes do perfil (Enter ou o botão Modrinth pesquisa no Modrinth).",
+    "fr": "La recherche filtre maintenant instantanément les mods/shaders/packs du profil (Entrée ou le bouton Modrinth cherche sur Modrinth)."
   }
 }
