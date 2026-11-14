@@ -1,14 +1,14 @@
 {
-  "version": "2.6.1",
-  "file": "app-2.6.1.zip",
-  "size": 226612,
-  "sha256": "39b37379df88685aa34bc787c7ad73da7359f203c7038e02dbb63ed388f3bc9c",
-  "sig": "59hrYUtVDMuexSjjMA3bYNVajMKexfxlFTUJQEEWKuKYOk2ijCdx/rTvXKGLrNtY0CSQsTkF21Mvj9voqzouAQ==",
+  "version": "2.7.0",
+  "file": "app-2.7.0.zip",
+  "size": 232195,
+  "sha256": "b31ac5dce5d5ece521364696bb5ef9ea1961583a1e31b37700900b5eb73a9a48",
+  "sig": "6cRv+kgUZe65FhzyWOQ4BxIP+zga4xcjTtecxsOiCBbwmhl/NNMrtTYtoY8ByfFUFnBQIlBvr1bJweeHWx28Dg==",
   "notes": {
-    "en": "Taskbar: the client now registers itself as NRML Client with its own logo. Unpin the old icon and pin it again.",
-    "hu": "Tálca: a kliens mostantól NRML Client néven és saját logóval jelentkezik be. Vedd le a régi ikont, és tűzd ki újra.",
-    "es": "Barra de tareas: el cliente ahora se registra como NRML Client con su propio logo. Desancla el icono antiguo y vuelve a anclarlo.",
-    "pt": "Barra de tarefas: o cliente agora se registra como NRML Client com seu próprio logo. Desafixe o ícone antigo e fixe novamente.",
-    "fr": "Barre des tâches : le client s’enregistre désormais sous le nom NRML Client avec son propre logo. Détachez l’ancienne icône et épinglez-la à nouveau."
+    "en": "New: search mods, shaders, resource packs and modpacks in every profile, pick any version (roll back), and a Sync compatibility button that updates every mod to the newest version supporting the chosen Minecraft version.",
+    "hu": "Új: kereső minden profilban (mod, shader, resource pack, modpack), tetszőleges verzió telepítése (visszalépés is), és Összehangolás gomb, ami minden modot a választott Minecraft verziót támogató legfrissebb verzióra frissít.",
+    "es": "Nuevo: búsqueda de mods, shaders, paquetes de recursos y modpacks en cada perfil, elige cualquier versión (volver atrás) y un botón de sincronizar compatibilidad que actualiza cada mod a la versión más reciente compatible.",
+    "pt": "Novo: busca de mods, shaders, pacotes de recursos e modpacks em cada perfil, escolha qualquer versão (voltar atrás) e um botão de sincronizar compatibilidade que atualiza cada mod para a versão mais recente compatível.",
+    "fr": "Nouveau : recherche de mods, shaders, packs de ressources et modpacks dans chaque profil, choix de version (retour arrière) et bouton de synchronisation qui met chaque mod à la dernière version compatible."
   }
 }
