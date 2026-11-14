@@ -1,14 +1,14 @@
 {
-  "version": "2.7.1",
-  "file": "app-2.7.1.zip",
-  "size": 232463,
-  "sha256": "e40870355476bd111ed595b0999b67359cecc1990e2a3566309c948e737b3694",
-  "sig": "0WjbFKXsiR5TxTubcEU9rPQh1cVYs981Hzue1EPqU1Jk1koi0pPSKkQqJDvWtxtIPIGgHRRToWfOM2oWKZ9CBw==",
+  "version": "2.8.0",
+  "file": "app-2.8.0.zip",
+  "size": 236866,
+  "sha256": "3f6705c8b00f0444f44e3ccb3cfc4a993dfc65eeda9dc309ad0b4bbccd90866e",
+  "sig": "Eb4qDDqaiDqCcZIAXFOj+hWAU36oP1LKJJ32wv6fBnoAML8OaUEi9M8Vs5G1qZY5q2ycds1XV9/H/2h+yeHSDg==",
   "notes": {
-    "en": "Search box now filters the mods/shaders/packs already in the profile as you type (Enter or the Modrinth button searches Modrinth).",
-    "hu": "A kereső mostantól gépelés közben szűri a profilban lévő modokat/shadereket/csomagokat (Enter vagy a Modrinth gomb: keresés a Modrinthen).",
-    "es": "El buscador ahora filtra al instante los mods/shaders/paquetes del perfil (Enter o el botón Modrinth busca en Modrinth).",
-    "pt": "A busca agora filtra na hora os mods/shaders/pacotes do perfil (Enter ou o botão Modrinth pesquisa no Modrinth).",
-    "fr": "La recherche filtre maintenant instantanément les mods/shaders/packs du profil (Entrée ou le bouton Modrinth cherche sur Modrinth)."
+    "en": "Sync compatibility now respects mod dependencies (e.g. Nvidium needs Sodium 0.9.2): it prefers release builds and auto-fixes clashes. Dialog redesigned with always-visible buttons. New Versions / downgrade button on every mod in its detail panel. Update mods uses the same safe logic.",
+    "hu": "Az Összehangolás mostantól figyeli a modok függőségeit (pl. a Nvidiumnak Sodium 0.9.2 kell): a release verziókat részesíti előnyben és automatikusan javítja az ütközéseket. Újratervezett ablak, a gombok mindig látszanak. Új Verziók / visszalépés gomb minden mod részletei között. Az Update mods is ugyanezt a biztonságos logikát használja.",
+    "es": "Sincronizar ahora respeta las dependencias (p. ej. Nvidium necesita Sodium 0.9.2): prefiere versiones release y corrige choques solo. Diálogo rediseñado con botones siempre visibles. Nuevo botón Versiones / volver atrás en cada mod. Actualizar mods usa la misma lógica segura.",
+    "pt": "Sincronizar agora respeita dependências (ex.: Nvidium precisa do Sodium 0.9.2): prefere versões release e corrige conflitos sozinho. Diálogo redesenhado com botões sempre visíveis. Novo botão Versões / voltar atrás em cada mod. Atualizar mods usa a mesma lógica segura.",
+    "fr": "La synchro respecte maintenant les dépendances (ex. Nvidium exige Sodium 0.9.2) : elle préfère les versions release et corrige seule les conflits. Dialogue redessiné, boutons toujours visibles. Nouveau bouton Versions / retour arrière sur chaque mod. Mettre à jour les mods utilise la même logique sûre."
   }
 }
