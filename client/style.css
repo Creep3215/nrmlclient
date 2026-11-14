@@ -496,3 +496,25 @@ body.dr-on #dr .dr-pill{animation:nxPop .4s .12s var(--ease) both}
 #splash.leave .sp-sub .sp-line{animation:none;opacity:1;width:100%;transform:scaleX(var(--cs,.4))}
 #splash.leave .sp-cli span{animation:none;opacity:1;transform:none}
 #splash.out{clip-path:none;opacity:0}
+
+/* 2.7.0 search / versions / sync */
+.nxsb{position:relative;display:inline-flex;gap:6px;align-items:center;margin-right:8px}
+.nxsb input{width:200px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:inherit}
+.nxsb select{padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:inherit}
+#nxsr{display:none;position:absolute;top:100%;left:0;margin-top:6px;width:380px;max-height:340px;overflow:auto;z-index:50;background:#1c1c20;border:1px solid rgba(255,255,255,.14);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+#nxsr.on{display:block}
+.nxi{display:flex;gap:10px;padding:8px 10px;cursor:pointer;align-items:center}
+.nxi:hover{background:rgba(255,255,255,.07)}
+.nxi img{width:34px;height:34px;border-radius:6px;object-fit:cover;background:rgba(255,255,255,.06)}
+.nxi span,.nxv .n{display:flex;flex-direction:column;min-width:0}
+.nxi small,.nxv small{opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nxe{padding:12px;opacity:.7}
+.nxvl{max-height:360px;overflow:auto;margin:8px 0}
+.nxsl{max-height:260px;overflow:auto}
+.nxv{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid rgba(255,255,255,.07)}
+.nxv.cur{background:rgba(255,255,255,.05)}
+.nxv em{font-style:normal;font-size:11px;opacity:.7;margin-left:6px}
+.nxv em.st{opacity:1;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.08)}
+.nxv em.st.ok{color:#6fd98a}.nxv em.st.upd{color:#f0b24a}.nxv em.st.none{color:#ef6b6b}.nxv em.st.unk{opacity:.5}
+.nxsum span{margin-right:14px}.nxsum .ok{color:#6fd98a}.nxsum .up{color:#f0b24a}.nxsum .no{color:#ef6b6b}
+.nxck{display:flex;gap:6px;align-items:center;margin:8px 0}

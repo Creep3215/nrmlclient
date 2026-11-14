@@ -1,0 +1,53 @@
+const {chromium}=require('playwright');const path=require('path');
+const APP=path.resolve(process.argv[2]);
+(async()=>{
+const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1100,height:720},reducedMotion:'reduce'});
+const errs=[];pg.on('pageerror',e=>errs.push('PAGEERR '+e.message));pg.on('console',m=>{if(m.type()==='error')errs.push('CONSOLE '+m.text())});
+await pg.addInitScript(()=>{
+  const calls=[];window.__calls=calls;
+  const prof={id:'p1',name:'Test',mc:'26.3',loader:'fabric',ram:8192,fast:false,stable:false,last:Date.now()-5e5};
+  let files={mods:['ferritecore-6.0.jar','sodium.jar.disabled'],shaderpacks:[],resourcepacks:['pack.zip']};
+  const ICON='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+  window.api={on(){},pathOf:()=>'',call:async(ch,...a)=>{calls.push([ch,...a]);
+    switch(ch){
+    case'state':return{profiles:[prof],config:{},account:{name:'Steve',id:'1'}};
+    case'mods:check':return{names:['FerriteCore']};case'mods:update':await new Promise(r=>setTimeout(r,3500));return{updated:['x'],total:2};case'flist':return JSON.parse(JSON.stringify(window.__FLX||files));
+    case'versions':return['26.3','26.2','1.21.4','1.20.1'];
+    case'finfo':return a[1]==='mods'?[{file:'ferritecore-6.0.jar',on:true,title:'FerriteCore',version:'6.0',description:'Memory',authors:['malte'],license:'MIT',icon:null,size:9000},{file:'sodium.jar.disabled',on:false,title:'Sodium',version:'0.6',icon:ICON}]:[{file:'pack.zip',on:true,title:'My Pack',icon:null}];
+    case'fmeta':return{'ferritecore-6.0.jar':{title:'FerriteCore',version_number:'6.0.0',icon_url:null,description:'Memory usage optimizations',downloads:12345}};
+    case'fdetail':return{path:'C:\\\\x\\\\mods\\\\'+a[2],size:123456,mtime:1,on:!/\.disabled$/.test(a[2]),local:{title:'FerriteCore',version:'6.0',description:'local'},mr:{title:'FerriteCore',description:'Memory usage optimizations',version_number:'6.0.0',license:'LGPL',downloads:5000},team:[{name:'malte0811',role:'Owner'}],url:'https://modrinth.com/mod/ferritecore'};
+    case'mods:check':return{names:['Sodium','Lithium','Iris','Fabric API']};case'theme:get':return{on:false,preset:'ember',blur:5,speed:1,bright:90,zoom:1.2,custom:false,prev:null};case'theme:save':return true;case'sysinfo':return{totalMB:32768,freeMB:20000,recommendedMB:16384};
+    case'pbackup':return'saves-backup-20261105-1';
+    case'psave':if(a[0].mc)prof.mc=a[0].mc;if(a[0].ram)prof.ram=a[0].ram;return prof.id;
+    case'ftoggle':{const i=files[a[1]].indexOf(a[2]);files[a[1]][i]=/\.disabled$/.test(a[2])?a[2].replace(/\.disabled$/,''):a[2]+'.disabled';return;}
+    case'fdel':files[a[1]]=files[a[1]].filter(x=>x!==a[2]);return;
+    case'search':return [{project_id:'AAA',title:'Sodium',description:'fast',icon_url:ICON}];
+    case'lib:versions':return [{id:'v2',number:'0.6.0',name:'x',date:'2026-10-01',mc:['26.3'],loaders:['fabric'],type:'release',file:{name:'sodium-0.6.0.jar',size:1},installed:false},{id:'v1',number:'0.5.0',name:'x',date:'2026-09-01',mc:['26.3'],loaders:['fabric'],type:'release',file:{name:'sodium-0.5.0.jar',size:1},installed:true}];
+    case'lib:install':return {file:'sodium-0.6.0.jar'};
+    case'sync:analyze':return {mc:'26.3',loader:'fabric',total:2,known:2,candidates:['26.2','26.1'],best:'26.2',target:a[1]||'26.2',rows:[{file:'a.jar',title:'FerriteCore',status:'upd',from:'6.0',to:'6.1'},{file:'b.jar',title:'Sodium',status:'ok',from:'0.6'},{file:'c.jar',title:'Foo',status:'none',from:'1'}]};
+    case'sync:apply':return {updated:['FerriteCore'],failed:[],incompatible:['Foo'],mc:a[1]};
+    default:return null;}}};
+  window.confirm=()=>true;
+});
+await pg.goto('file://'+APP+'/index.html',{waitUntil:'domcontentloaded'});
+await pg.waitForTimeout(1200);
+let bad=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)bad++;};
+await pg.waitForTimeout(7500);
+await pg.evaluate(()=>{pick(S.profiles[0].id)});await pg.waitForTimeout(800);
+ok(await pg.evaluate(()=>!!document.querySelector('#tbar #nxq')&&!!document.querySelector('#tbar .nxsy')),'search box + sync button in toolbar');
+await pg.fill('#nxq','sodium');await pg.waitForTimeout(900);
+ok(await pg.evaluate(()=>document.querySelectorAll('#nxsr .nxi').length===1),'search results shown');
+await pg.click('#nxsr .nxi');await pg.waitForTimeout(700);
+ok(await pg.evaluate(()=>document.querySelectorAll('#nxvl .nxv').length===2&&!!document.querySelector('#nxvl .nxv.cur')),'version list with installed marked');
+await pg.screenshot({path:'sr1.png'});
+await pg.click('#nxvl .nxv:not(.cur) button');await pg.waitForTimeout(500);
+ok(await pg.evaluate(()=>window.__calls.some(c=>c[0]==='lib:install'&&c[2]==='v2'&&c[3]==='mod')),'install chosen version');
+await pg.waitForTimeout(600);
+await pg.click('#tbar .nxsy');await pg.waitForTimeout(900);
+ok(await pg.evaluate(()=>document.querySelectorAll('#nxsy .nxsl .nxv').length===3&&document.getElementById('nxtg').value==='26.2'),'sync dialog shows rows and best target');
+await pg.screenshot({path:'sr2.png'});
+await pg.evaluate(()=>{const s=document.getElementById('nxtg');s.value='26.1';s.dispatchEvent(new Event('change'));});await pg.waitForTimeout(600);
+ok(await pg.evaluate(()=>window.__calls.some(c=>c[0]==='sync:analyze'&&c[2]==='26.1')),'target change re-analyzes');
+await pg.evaluate(()=>nxSyncGo());await pg.waitForTimeout(600);
+ok(await pg.evaluate(()=>window.__calls.some(c=>c[0]==='sync:apply'&&c[2]==='26.1')),'apply called');
+console.log(errs.filter(e=>/PAGEERR/.test(e)).join('\n'));await b.close();process.exit(bad?1:0);})();

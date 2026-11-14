@@ -40,7 +40,7 @@ const ROOT=path[_0x5dd4ae(0x372)](app[_0x5dd4ae(0x186)](_0x5dd4ae(0x228)),_0x5dd
     optimize:a=>{id(a[0]);},
     finfo:a=>{id(a[0]);oneOf(a[1],DIRS);},fmeta:a=>{id(a[0]);oneOf(a[1],DIRS);},
     fdetail:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},freveal:a=>{id(a[0]);oneOf(a[1],DIRS);file(a[2]);},
-    sysinfo:none,pbackup:a=>id(a[0]),'mem:trim':none,'launch:begin':none,'launch:cancel':none,'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
+    sysinfo:none,pbackup:a=>id(a[0]),'mem:trim':none,'lib:versions':a=>{id(a[0]);id(a[1]);oneOf(a[2],TYPES);},'lib:install':a=>{id(a[0]);id(a[1]);oneOf(a[2],TYPES);},'sync:analyze':a=>{id(a[0]);if(a[1]!=null){str(a[1],20);if(!/^\d+\.\d+(\.\d+)?$/.test(a[1]))bad();}},'sync:apply':a=>{id(a[0]);str(a[1],20);if(!/^\d+\.\d+(\.\d+)?$/.test(a[1]))bad();},'launch:begin':none,'launch:cancel':none,'upd:state':none,'upd:check':none,'upd:install':none,'upd:restart':none,'theme:get':a=>id(a[0]),'theme:pick':none,
     'theme:save':a=>{const o=a[0];obj(o);id(o.id);bool(o.on);for(const k of Object.keys(o))if(!['id','on','preset','blur','speed','bright','zoom','custom','faces','prev','btn','anim','logo','splash','font','static','accent','ui'].includes(k))bad();
       str(o.preset,20,true);for(const k of ['blur','speed','bright','zoom'])if(o[k]!=null&&!Number.isFinite(o[k]))bad();
       if(o.faces!=null){if(!Array.isArray(o.faces)||o.faces.length!==6)bad();o.faces.forEach(f=>str(f,3500000));}str(o.prev,200000,true);str(o.accent,7,true);for(const k of ['btn','anim','logo','splash','font','static'])if(o[k]!=null)bool(o[k]);if(o.ui!=null){obj(o.ui);for(const k of Object.keys(o.ui)){if(!['button','buttonH','buttonD','logo','edition','bg'].includes(k))bad();str(o.ui[k],k==='bg'?12000000:2500000);}}},
@@ -688,3 +688,113 @@ try{if(process.platform==='win32'){app.whenReady().then(()=>setTimeout(()=>{try{
       if(s&&s.target&&path.resolve(s.target).toLowerCase()===path.resolve(exe).toLowerCase()&&(s.icon!==ico||s.appUserModelId!==AU||s.description!=='NRML Client'))
         shell.writeShortcutLink(p,'update',{icon:ico,iconIndex:0,appUserModelId:AU,description:'NRML Client'});}catch{}}
 }catch{}},8000));}}catch{}
+
+
+// ===== 2.7.0 per-profile search with version browser + "sync compatibility" =====
+const __RV=/^\d+\.\d+(\.\d+)?$/;
+const __vcmp=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<3;i++){const d=(y[i]||0)-(x[i]||0);if(d)return d;}return 0;};
+const __pfile=v=>(v&&v.files&&(v.files.find(f=>f.primary)||v.files[0]))||null;
+const __vinfo=v=>{const f=__pfile(v)||{};return{id:v.id,number:__cap(v.version_number,40),name:__cap(v.name,80),date:v.date_published,mc:(v.game_versions||[]).slice(0,40),loaders:(v.loaders||[]).slice(0,6),type:v.version_type,file:{name:__cap(f.filename,120),size:f.size|0}};};
+const __dirOf=(pid,kind)=>path.join(pdir(pid),FOLDER[kind]);
+const __idx=pid=>path.join(pdir(pid),'.prism-index.json');
+async function __put(pid,kind,v,oldFile){
+  const f=__pfile(v);if(!f||!f.hashes||!f.hashes.sha512)throw new Error('E:nofile');
+  const dir=__dirOf(pid,kind),ix=rd(__idx(pid),{}),name=path.basename(f.filename);
+  if(!/\.(jar|zip)$/i.test(name))throw new Error('E:nofile');
+  const tmp=path.join(dir,'.'+name+'.tmp');
+  try{
+    await dl(f.url,tmp,f.hashes.sha512);
+    if(sha512(tmp)!==f.hashes.sha512){fs.rmSync(tmp,{force:true});throw new Error('E:hash');}
+    let dis=false;
+    for(const fn of fs.readdirSync(dir)){
+      const base=fn.replace(/\.disabled$/,'');
+      if(ix[base]===v.project_id&&base!==name){if(/\.disabled$/.test(fn))dis=true;fs.rmSync(path.join(dir,fn),{force:true});delete ix[base];}
+    }
+    if(oldFile&&oldFile!==name&&oldFile!==name+'.disabled'&&/^[^\\/]+$/.test(oldFile)){const op=path.join(dir,oldFile);if(fs.existsSync(op)){if(/\.disabled$/.test(oldFile))dis=true;fs.rmSync(op,{force:true});delete ix[oldFile.replace(/\.disabled$/,'')];}}
+    if(fs.existsSync(path.join(dir,name+'.disabled'))){dis=true;fs.rmSync(path.join(dir,name+'.disabled'),{force:true});}
+    fs.rmSync(path.join(dir,name),{force:true});
+    fs.renameSync(tmp,path.join(dir,name+(dis?'.disabled':'')));
+    ix[name]=v.project_id;wr(__idx(pid),ix);
+    return name;
+  }catch(e){try{fs.rmSync(tmp,{force:true});}catch{}throw e;}
+}
+ipcMain.handle('lib:versions',async(_e,pid,projectId,kind,all)=>{
+  const p=profiles().find(x=>x.id===pid);if(!p)throw new Error('E:arg');
+  const q=new URLSearchParams();
+  if(!all){q.set('game_versions',JSON.stringify([p.mc]));if(kind==='mod'&&p.loader&&p.loader!=='other')q.set('loaders',JSON.stringify([p.loader]));}
+  const vs=await api('/project/'+projectId+'/version'+(q.toString()?'?'+q:''));
+  let have=new Set();try{have=new Set(fs.readdirSync(__dirOf(pid,kind)).map(x=>x.replace(/\.disabled$/,'')));}catch{}
+  return(vs||[]).slice(0,80).map(v=>{const i=__vinfo(v);i.installed=have.has(i.file.name);return i;});
+});
+ipcMain.handle('lib:install',async(_e,pid,versionId,kind)=>{
+  const p=profiles().find(x=>x.id===pid);if(!p)throw new Error('E:arg');
+  const v=await api('/version/'+versionId);
+  let olds=[];
+  try{
+    const dir=__dirOf(pid,kind),hs={};
+    for(const f of fs.readdirSync(dir))if(/\.(jar|zip)(\.disabled)?$/i.test(f))try{hs[f]=sha512(path.join(dir,f));}catch{}
+    const cur=Object.keys(hs).length?await __mrPost('/version_files',{hashes:Object.values(hs),algorithm:'sha512'}):{};
+    olds=Object.keys(hs).filter(f=>cur&&cur[hs[f]]&&cur[hs[f]].project_id===v.project_id);
+  }catch{}
+  const name=await __put(pid,kind,v,olds[0]);
+  for(const f of olds.slice(1)){try{if(f!==name&&f!==name+'.disabled')fs.rmSync(path.join(__dirOf(pid,kind),f),{force:true});}catch{}}
+  delete __UPC[pid];
+  return{file:name};
+});
+async function __sy(pid,target){
+  const p=profiles().find(x=>x.id===pid);if(!p)throw new Error('E:arg');
+  const dir=path.join(pdir(pid),'mods');let files=[];
+  try{files=fs.readdirSync(dir).filter(f=>/\.jar(\.disabled)?$/i.test(f)&&!/^nrml-overlay/i.test(f));}catch{}
+  const hs={};for(const f of files){try{hs[f]=sha512(path.join(dir,f));}catch{}}
+  const hashes=[...new Set(Object.values(hs))];
+  const out={mc:p.mc,loader:p.loader,total:files.length,rows:[],candidates:[],best:null,target:target||null};
+  if(!hashes.length)return{out,hs};
+  const cur=await __mrPost('/version_files',{hashes,algorithm:'sha512'})||{};
+  const pids=[...new Set(Object.values(cur).map(v=>v&&v.project_id).filter(x=>/^\w{1,16}$/.test(String(x))))];
+  const meta={};
+  for(let i=0;i<pids.length;i+=50){
+    const pr=await __mrGet('/projects?ids='+encodeURIComponent(JSON.stringify(pids.slice(i,i+50))))||[];
+    for(const x of pr)meta[x.id]=x;
+  }
+  // newest release MC versions that EVERY known mod supports
+  const cnt={};let known=0;
+  for(const id of pids){const m=meta[id];if(!m)continue;known++;for(const g of new Set(m.game_versions||[]))if(__RV.test(g))cnt[g]=(cnt[g]||0)+1;}
+  const all=Object.keys(cnt).sort(__vcmp);
+  out.candidates=all.filter(g=>cnt[g]===known).slice(0,14);
+  const top=all.length?Math.max(...Object.values(cnt)):0;
+  out.best=out.candidates[0]||all.find(g=>cnt[g]===top)||null;
+  out.known=known;out.counts=Object.fromEntries(all.slice(0,14).map(g=>[g,cnt[g]]));
+  const tg=target||out.best||p.mc;out.target=tg;
+  const up=await __mrPost('/version_files/update',{hashes,algorithm:'sha512',loaders:[p.loader==='other'?'fabric':p.loader],game_versions:[tg]})||{};
+  for(const f of files){
+    const h=hs[f],c=cur[h],u=up[h],m=c&&meta[c.project_id];
+    const title=__cap(m?m.title:f.replace(/\.jar(\.disabled)?$/i,''),60);
+    if(!c){out.rows.push({file:f,title,status:'unk'});continue;}
+    const uf=__pfile(u);
+    if(!u||!uf)out.rows.push({file:f,title,status:'none',from:__cap(c.version_number,30)});
+    else if(uf.hashes&&uf.hashes.sha512===h)out.rows.push({file:f,title,status:'ok',from:__cap(c.version_number,30)});
+    else out.rows.push({file:f,title,status:'upd',from:__cap(c.version_number,30),to:__cap(u.version_number,30)});
+  }
+  out._up=up;
+  return{out,hs,up,cur};
+}
+ipcMain.handle('sync:analyze',async(_e,pid,target)=>{
+  if(target&&!__RV.test(target))throw new Error('E:arg');
+  const r=await __sy(pid,target);delete r.out._up;return r.out;
+});
+ipcMain.handle('sync:apply',async(_e,pid,target,setMc)=>{
+  if(!__RV.test(target))throw new Error('E:arg');
+  const p=profiles().find(x=>x.id===pid);if(!p)throw new Error('E:arg');
+  const r=await __sy(pid,target),dir=path.join(pdir(pid),'mods');
+  const todo=r.out.rows.filter(x=>x.status==='upd'),res={updated:[],failed:[],incompatible:r.out.rows.filter(x=>x.status==='none').map(x=>x.title)};
+  send('status','S:upd');let n=0;
+  try{
+    for(const row of todo){
+      send('status','S:upd|'+(++n)+'/'+todo.length);
+      try{await __put(pid,'mod',r.up[r.hs[row.file]],row.file);res.updated.push(row.title);}catch{res.failed.push(row.title);}
+    }
+    if(setMc&&!res.failed.length){const l=profiles(),q=l.find(x=>x.id===pid);if(q){q.mc=target;wr(PF,l);res.mc=target;}}
+  }finally{send('status','');}
+  delete __UPC[pid];
+  return res;
+});

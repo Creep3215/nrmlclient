@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.6.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.7.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -630,3 +630,66 @@ function nxRecDecorate(){
   finally{clearInterval(tk);clearInterval(pl);await diff();NXREC.upd=null;try{nxPaint(true);}catch{}}
 };}
 setInterval(()=>{try{if(tab==='mods'&&document.getElementById('flist')&&Object.keys(nxRecGet(cur)).length!==NXREC.n)nxPaint(true);}catch{}},15000);
+
+// ===== 2.7.0 per-profile search + version browser + sync compatibility =====
+var NXS={tm:0,seq:0,res:[],vk:null};
+function nxSType(){const s=document.getElementById('nxst');return s&&s.value||TYPE[tab]||'mod';}
+(function(){const _db=drawBar;drawBar=function(){_db.apply(this,arguments);try{nxSbAdd();}catch{}};})();
+function nxSbAdd(){
+  const b=document.getElementById('tbar');if(!b||b.querySelector('#nxq'))return;
+  const ty=TYPE[tab]||'mod',o=[['mod','sr_mod'],['shader','sr_shd'],['resourcepack','sr_rp'],['modpack','sr_mp']];
+  const w=document.createElement('span');w.className='nxsb';
+  w.innerHTML='<select id="nxst" onchange="nxSGo()">'+o.map(x=>'<option value="'+x[0]+'"'+(x[0]===ty?' selected':'')+'>'+esc(t(x[1]))+'</option>').join('')+'</select><input id="nxq" type="text" autocomplete="off" placeholder="'+esc(t('sr_ph'))+'" oninput="nxSTyp()" onkeydown="if(event.key===\'Enter\')nxSGo()"><div id="nxsr"></div>';
+  b.insertBefore(w,b.firstChild);
+  if(tab==='mods'){const y=document.createElement('button');y.className='nxsy';y.textContent='⇄ '+t('sy_btn');y.onclick=()=>nxSync();b.insertBefore(y,w.nextSibling);}
+}
+function nxSTyp(){clearTimeout(NXS.tm);NXS.tm=setTimeout(nxSGo,380);}
+async function nxSGo(){
+  const q=(document.getElementById('nxq')||{}).value||'',box=document.getElementById('nxsr');if(!box)return;
+  if(!q.trim()){box.classList.remove('on');box.innerHTML='';return;}
+  const my=++NXS.seq;box.classList.add('on');box.innerHTML='<div class="nxe">'+esc(t('sr_load'))+'</div>';
+  try{
+    const r=await A('search',nxSType(),q.trim(),cur,0);if(my!==NXS.seq)return;
+    NXS.res=r||[];
+    box.innerHTML=NXS.res.length?NXS.res.map((h,i)=>'<div class="nxi" onclick="nxVer('+i+')"><img src="'+esc(h.icon_url||'')+'" alt=""><span><b>'+esc(h.title)+'</b><small>'+esc(h.description||'')+'</small></span></div>').join(''):'<div class="nxe">'+esc(t('sr_none'))+'</div>';
+  }catch(e){if(my===NXS.seq)box.innerHTML='<div class="nxe">'+esc(t('sr_err'))+'</div>';}
+}
+document.addEventListener('click',e=>{const b=document.getElementById('nxsr');if(b&&!e.target.closest('.nxsb'))b.classList.remove('on');});
+async function nxVer(i,all){
+  const h=NXS.res[i];if(!h)return;const ty=nxSType();NXS.vk={i,all:!!all,ty};
+  const box=document.getElementById('nxsr');if(box)box.classList.remove('on');
+  modal('<h2>'+esc(h.title)+'</h2><p class="mut">'+esc(t('vr_sub'))+'</p><div id="nxvl" class="nxvl"><div class="nxe">'+esc(t('sr_load'))+'</div></div><div class="bar">'+(ty==='modpack'?'':'<label class="nxck"><input type="checkbox" id="nxall" '+(all?'checked':'')+' onchange="nxVer('+i+',this.checked)"> '+esc(t('vr_all'))+'</label>')+'<button class="txt" onclick="closeM()">'+esc(t('cancel'))+'</button></div>');
+  try{
+    if(ty==='modpack'){document.getElementById('nxvl').innerHTML='<div class="nxe">'+esc(t('vr_mp'))+'</div><div class="bar"><button class="solid" onclick="nxMp('+i+')">'+esc(t('vr_inst'))+'</button></div>';return;}
+    const vs=await A('lib:versions',cur,h.project_id,ty,!!all);
+    NXS.vs=vs;
+    document.getElementById('nxvl').innerHTML=vs.length?vs.map((v,k)=>'<div class="nxv'+(v.installed?' cur':'')+'"><span class="n"><b>'+esc(v.number)+'</b> <em class="'+esc(v.type)+'">'+esc(v.type)+'</em><small>'+esc(v.mc.slice(0,4).join(', ')+(v.mc.length>4?' …':''))+' · '+esc((v.date||'').slice(0,10))+'</small></span>'+(v.installed?'<span class="mut">'+esc(t('vr_have'))+'</span>':'<button onclick="nxVI('+k+',this)">'+esc(t('vr_inst'))+'</button>')+'</div>').join(''):'<div class="nxe">'+esc(t('vr_none'))+'</div>';
+  }catch(e){const l=document.getElementById('nxvl');if(l)l.innerHTML='<div class="nxe">'+esc(t('sr_err'))+'</div>';}
+}
+async function nxVI(k,btn){
+  const v=NXS.vs[k],h=NXS.res[NXS.vk.i];if(!v)return;btn.disabled=true;btn.textContent='…';
+  try{await A('lib:install',cur,v.id,NXS.vk.ty);toast(t('vr_done')+' '+v.number);closeM();try{refreshFiles();}catch{}}
+  catch(e){btn.disabled=false;btn.textContent=t('vr_inst');fail(e);}
+}
+async function nxMp(i){const h=NXS.res[i];try{closeM();await A('install',null,h.project_id,'modpack');toast(t('vr_done'));try{await load();}catch{}}catch(e){fail(e);}}
+// ---- sync compatibility ----
+async function nxSync(target){
+  modal('<h2>⇄ '+esc(t('sy_btn'))+'</h2><div id="nxsy" class="nxvl"><div class="nxe">'+esc(t('sy_scan'))+'</div></div>');
+  try{
+    const r=await A('sync:analyze',cur,target||undefined);NXS.sy=r;
+    if(!r.rows.length){document.getElementById('nxsy').innerHTML='<div class="nxe">'+esc(t('sy_empty'))+'</div>';return;}
+    const c={ok:0,upd:0,none:0,unk:0};r.rows.forEach(x=>c[x.status]++);
+    const opts=[...new Set([r.mc,...r.candidates,r.target])].map(g=>'<option'+(g===r.target?' selected':'')+'>'+esc(g)+'</option>').join('');
+    const lbl={ok:'sy_ok',upd:'sy_upd',none:'sy_none',unk:'sy_unk'};
+    document.getElementById('nxsy').innerHTML='<p class="mut">'+esc(r.candidates.length?t('sy_best')+' '+r.candidates[0]:t('sy_nobest'))+'</p><label>'+esc(t('sy_target'))+' <select id="nxtg" onchange="nxSync(this.value)">'+opts+'</select></label><p class="nxsum"><span class="ok">'+c.ok+' '+esc(t('sy_ok'))+'</span><span class="up">'+c.upd+' '+esc(t('sy_upd'))+'</span><span class="no">'+c.none+' '+esc(t('sy_none'))+'</span></p><div class="nxsl">'+r.rows.map(x=>'<div class="nxv"><span class="n"><b>'+esc(x.title)+'</b><small>'+(x.status==='upd'?esc(x.from+' → '+x.to):esc(x.from||''))+'</small></span><em class="st '+x.status+'">'+esc(t(lbl[x.status]))+'</em></div>').join('')+'</div>'+(r.target!==r.mc?'<label class="nxck"><input type="checkbox" id="nxmc" checked> '+esc(t('sy_setmc'))+' '+esc(r.target)+'</label>':'')+'<div class="bar"><button class="solid" onclick="nxSyncGo()">'+esc(t('sy_apply'))+'</button><button class="txt" onclick="closeM()">'+esc(t('cancel'))+'</button></div>';
+  }catch(e){const l=document.getElementById('nxsy');if(l)l.innerHTML='<div class="nxe">'+esc(t('sr_err'))+'</div>';}
+}
+async function nxSyncGo(){
+  const r=NXS.sy;if(!r)return;const mc=document.getElementById('nxmc');
+  const sm=mc&&mc.checked;closeM();
+  try{
+    const o=await A('sync:apply',cur,r.target,!!sm);
+    toast(t('sy_done')+' '+o.updated.length+(o.incompatible.length?' · '+o.incompatible.length+' '+t('sy_none'):'')+(o.failed.length?' · ✗ '+o.failed.length:''));
+    try{await load();}catch{}try{refreshFiles();}catch{}
+  }catch(e){fail(e);}
+}
