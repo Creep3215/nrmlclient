@@ -1,14 +1,14 @@
 {
-  "version": "2.8.0",
-  "file": "app-2.8.0.zip",
-  "size": 236866,
-  "sha256": "3f6705c8b00f0444f44e3ccb3cfc4a993dfc65eeda9dc309ad0b4bbccd90866e",
-  "sig": "Eb4qDDqaiDqCcZIAXFOj+hWAU36oP1LKJJ32wv6fBnoAML8OaUEi9M8Vs5G1qZY5q2ycds1XV9/H/2h+yeHSDg==",
+  "version": "2.8.1",
+  "file": "app-2.8.1.zip",
+  "size": 238081,
+  "sha256": "f94085a273f1f7d2a4493ca5196e049e948a691dd8520d38d81197bc17294bc7",
+  "sig": "l6SFZAE+K4OLBlCrsEX1gDv4/Q5VeBumRXjilu9b7pKGcT6niADEwwnLq683en7REX+G8QRjhBjsXs6l72d6Ag==",
   "notes": {
-    "en": "Sync compatibility now respects mod dependencies (e.g. Nvidium needs Sodium 0.9.2): it prefers release builds and auto-fixes clashes. Dialog redesigned with always-visible buttons. New Versions / downgrade button on every mod in its detail panel. Update mods uses the same safe logic.",
-    "hu": "Az Összehangolás mostantól figyeli a modok függőségeit (pl. a Nvidiumnak Sodium 0.9.2 kell): a release verziókat részesíti előnyben és automatikusan javítja az ütközéseket. Újratervezett ablak, a gombok mindig látszanak. Új Verziók / visszalépés gomb minden mod részletei között. Az Update mods is ugyanezt a biztonságos logikát használja.",
-    "es": "Sincronizar ahora respeta las dependencias (p. ej. Nvidium necesita Sodium 0.9.2): prefiere versiones release y corrige choques solo. Diálogo rediseñado con botones siempre visibles. Nuevo botón Versiones / volver atrás en cada mod. Actualizar mods usa la misma lógica segura.",
-    "pt": "Sincronizar agora respeita dependências (ex.: Nvidium precisa do Sodium 0.9.2): prefere versões release e corrige conflitos sozinho. Diálogo redesenhado com botões sempre visíveis. Novo botão Versões / voltar atrás em cada mod. Atualizar mods usa a mesma lógica segura.",
-    "fr": "La synchro respecte maintenant les dépendances (ex. Nvidium exige Sodium 0.9.2) : elle préfère les versions release et corrige seule les conflits. Dialogue redessiné, boutons toujours visibles. Nouveau bouton Versions / retour arrière sur chaque mod. Mettre à jour les mods utilise la même logique sûre."
+    "en": "Security: login token now stored encrypted (OS keychain), stricter window sandbox and permissions, updates are sealed so they can be re-verified.",
+    "hu": "Biztonság: a bejelentkezési token mostantól titkosítva tárolódik (OS kulcstár), szigorúbb ablak-sandbox és jogosultságok, a frissítések lepecsételve, újra ellenőrizhetők.",
+    "es": "Seguridad: el token de inicio de sesión se guarda cifrado (llavero del SO), sandbox y permisos más estrictos, actualizaciones selladas y reverificables.",
+    "pt": "Segurança: o token de login agora é guardado criptografado (chaveiro do SO), sandbox e permissões mais rígidos, atualizações seladas e reverificáveis.",
+    "fr": "Sécurité : le jeton de connexion est stocké chiffré (trousseau du système), sandbox et permissions renforcés, mises à jour scellées et revérifiables."
   }
 }
