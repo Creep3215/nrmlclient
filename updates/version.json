@@ -1,14 +1,14 @@
 {
-  "version": "2.8.1",
-  "file": "app-2.8.1.zip",
-  "size": 238081,
-  "sha256": "f94085a273f1f7d2a4493ca5196e049e948a691dd8520d38d81197bc17294bc7",
-  "sig": "l6SFZAE+K4OLBlCrsEX1gDv4/Q5VeBumRXjilu9b7pKGcT6niADEwwnLq683en7REX+G8QRjhBjsXs6l72d6Ag==",
+  "version": "2.9.0",
+  "file": "app-2.9.0.zip",
+  "size": 241485,
+  "sha256": "26a56ba80a0b2f60e6dfc5079bb8fa2ec2d64f7b597849aa5eafb29fc8a3267a",
+  "sig": "AOt8G9n9RCJktJZ76L7Qtmg9FtkLoO/MtHAJ7ziuI0YUIsUJgrPlsistTEB3Wwbl2apx4d5jfXe/8pgMDXBCDw==",
   "notes": {
-    "en": "Security: login token now stored encrypted (OS keychain), stricter window sandbox and permissions, updates are sealed so they can be re-verified.",
-    "hu": "Biztonság: a bejelentkezési token mostantól titkosítva tárolódik (OS kulcstár), szigorúbb ablak-sandbox és jogosultságok, a frissítések lepecsételve, újra ellenőrizhetők.",
-    "es": "Seguridad: el token de inicio de sesión se guarda cifrado (llavero del SO), sandbox y permisos más estrictos, actualizaciones selladas y reverificables.",
-    "pt": "Segurança: o token de login agora é guardado criptografado (chaveiro do SO), sandbox e permissões mais rígidos, atualizações seladas e reverificáveis.",
-    "fr": "Sécurité : le jeton de connexion est stocké chiffré (trousseau du système), sandbox et permissions renforcés, mises à jour scellées et revérifiables."
+    "en": "Right-click a profile: Rename, Export, Pin, Recolour, Delete. Hold the left button and drag to reorder profiles. Recolour tints the profile row; selected row is now translucent. New Dark / White mode in Settings.",
+    "hu": "Jobb klikk a profilon: Átnevezés, Exportálás, Kitűzés, Átszínezés, Törlés. Bal gombot tartva húzással átrendezhető a profilok sorrendje. Az átszínezés halványan színezi a profil sorát, a kijelölt sor átlátszó. Új Sötét / Fehér mód a Beállításokban.",
+    "es": "Clic derecho en un perfil: Renombrar, Exportar, Fijar, Cambiar color, Eliminar. Mantén el botón izquierdo y arrastra para reordenar. El color tiñe la fila; la fila seleccionada es translúcida. Nuevo modo Oscuro / Claro en Ajustes.",
+    "pt": "Clique direito no perfil: Renomear, Exportar, Fixar, Mudar cor, Excluir. Segure o botão esquerdo e arraste para reordenar. A cor tinge a linha; a linha selecionada é translúcida. Novo modo Escuro / Claro nas Configurações.",
+    "fr": "Clic droit sur un profil : Renommer, Exporter, Épingler, Recolorer, Supprimer. Maintenez le clic gauche et glissez pour réordonner. La couleur teinte la ligne ; la ligne sélectionnée est translucide. Nouveau mode Sombre / Clair dans les Paramètres."
   }
 }

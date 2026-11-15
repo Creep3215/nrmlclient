@@ -26,7 +26,7 @@ async function boot(){const _0x327a50=_0x19b0c2;S=await A(_0x327a50(0x33c));if(T
   },true);
   // version label
   const v=document.getElementById('sver');
-  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.8.1 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
+  if(v){const fix=()=>{if(!/^NRML Client 2\./.test(v.textContent))v.textContent=v.textContent.replace(/^NRML [\d.]+/,'NRML Client 2.9.0 (STABLE)');};fix();new MutationObserver(fix).observe(v,{childList:true,characterData:true,subtree:true});}
 })();
 
 // ===== NRML Client 2.0.1: readable file list, detail drawer, version + memory dialogs =====
@@ -724,3 +724,90 @@ async function nxSyncGo(){
     try{await load();}catch{}try{refreshFiles();}catch{}
   }catch(e){closeM();fail(e);}
 }
+
+// ===== 2.9 profile context menu, drag-to-reorder, recolour, pin, dark/white mode =====
+function nxMode(m){m=m==='light'?'light':'dark';document.documentElement.dataset.mode=m;try{localStorage.setItem('nrml.mode',m);}catch{}}
+try{nxMode(localStorage.getItem('nrml.mode'));}catch{}
+(function(){const _l=load;load=async function(){const r=await _l.apply(this,arguments);try{if(S&&S.config&&S.config.mode)nxMode(S.config.mode);nxDeco();}catch{}return r;};})();
+(function(){const _s=settings;settings=function(){const r=_s.apply(this,arguments);try{
+  const h=[...document.querySelectorAll('h3')].find(x=>x.textContent.trim()===String(t('sec_game')).trim());
+  if(h&&!document.getElementById('nxmd')){const m=(S.config&&S.config.mode)||'dark';
+    h.insertAdjacentHTML('beforebegin','<h3>'+esc(t('md_lbl'))+'</h3>'+row(esc(t('md_dark'))+' / '+esc(t('md_light')),'','<select id="nxmd" onchange="nxSetMode(this.value)"><option value="dark"'+(m==='dark'?' selected':'')+'>'+esc(t('md_dark'))+'</option><option value="light"'+(m==='light'?' selected':'')+'>'+esc(t('md_light'))+'</option></select>'));}
+}catch{}return r;};})();
+async function nxSetMode(m){nxMode(m);try{S.config.mode=m;await A('cfgset',{mode:m});}catch(e){fail(e);}}
+const NXC=['#ff5a1f','#e8453c','#f0b24a','#6fd98a','#2fb5a6','#3d8bfd','#8a63f0','#e05fb0'];
+const nxProf=id=>S.profiles.find(p=>p.id===id);
+function nxOrder(){S.profiles=S.profiles.map((p,i)=>[p,i]).sort((a,b)=>(!!b[0].pin-!!a[0].pin)||a[1]-b[1]).map(x=>x[0]);}
+function nxDeco(){
+  const R=document.querySelectorAll('#rows .prow');
+  R.forEach(r=>{const p=nxProf(r.dataset.id);if(!p)return;
+    if(p.color){r.style.setProperty('--pc',p.color);r.classList.add('pc');}else{r.style.removeProperty('--pc');r.classList.remove('pc');}
+    const b=r.querySelector('.pn b');if(b){const has=b.querySelector('.nxpin');if(p.pin&&!has)b.insertAdjacentHTML('afterbegin','<i class="nxpin">⚑</i>');else if(!p.pin&&has)has.remove();}
+    const ix=r.querySelector('.ix');if(ix){const n=String([...r.parentNode.children].indexOf(r)+1).padStart(2,'0');if(ix.textContent!==n)ix.textContent=n;}
+  });
+}
+(function(){const _d=drawRows;drawRows=function(){try{nxOrder();}catch{}const r=_d.apply(this,arguments);try{nxDeco();}catch{}return r;};})();
+// --- context menu ---
+function nxCmClose(){const m=document.getElementById('nxcm');if(m)m.remove();}
+function nxCmOpen(id,x,y){
+  nxCmClose();const p=nxProf(id);if(!p)return;
+  const m=document.createElement('div');m.id='nxcm';
+  const it=(k,l,f,c)=>'<button class="'+(c||'')+'" onclick="'+f+'"><i>'+k+'</i>'+esc(l)+'</button>';
+  m.innerHTML=it('✎',t('cm_rename'),"nxRename('"+id+"')")+it('⇪',t('cm_export'),"nxExport('"+id+"')")+it('⚑',p.pin?t('cm_unpin'):t('cm_pin'),"nxPin('"+id+"')")+it('●',t('cm_color'),"nxCmColors('"+id+"')")+'<div class="nxsw" id="nxsw"></div>'+it('✕',t('cm_delete'),"nxDelete('"+id+"')",'dng');
+  document.body.appendChild(m);
+  const w=m.offsetWidth,h=m.offsetHeight;m.style.left=Math.max(6,Math.min(x,innerWidth-w-6))+'px';m.style.top=Math.max(6,Math.min(y,innerHeight-h-6))+'px';
+}
+function nxCmColors(id){
+  const b=document.getElementById('nxsw');if(!b)return;const p=nxProf(id);
+  b.innerHTML=NXC.map(c=>'<span class="'+(p&&p.color===c?'on':'')+'" style="background:'+c+'" onclick="nxColor(\''+id+'\',\''+c+'\')"></span>').join('')+'<label class="nxcu" title="'+esc(t('cm_color'))+'">+<input type="color" value="'+((p&&p.color)||'#ff5a1f')+'" onchange="nxColor(\''+id+'\',this.value)"></label><span class="nxno2" title="'+esc(t('cm_reset'))+'" onclick="nxColor(\''+id+'\',\'\')">⊘</span>';
+  b.classList.add('on');
+}
+document.addEventListener('contextmenu',e=>{const r=e.target.closest&&e.target.closest('#rows .prow');if(!r){nxCmClose();return;}e.preventDefault();nxCmOpen(r.dataset.id,e.clientX,e.clientY);});
+document.addEventListener('mousedown',e=>{if(!e.target.closest('#nxcm'))nxCmClose();},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')nxCmClose();});
+window.addEventListener('blur',nxCmClose);
+async function nxPatch(id,o){const p=nxProf(id);if(!p)return;await A('psave',{id,...o});Object.assign(p,o);}
+async function nxColor(id,c){nxCmClose();try{await nxPatch(id,{color:c});nxDeco();}catch(e){fail(e);}}
+async function nxPin(id){nxCmClose();try{const p=nxProf(id);await nxPatch(id,{pin:!p.pin});const old=NXP.sw;NXP.sw=false;drawRows();NXP.sw=old;await A('porder',S.profiles.map(x=>x.id));}catch(e){fail(e);}}
+function nxRename(id){
+  nxCmClose();const p=nxProf(id);if(!p)return;
+  modal('<h2>'+esc(t('cm_rename'))+'</h2><input id="nxrn" type="text" maxlength="60" value="'+esc(p.name)+'" onkeydown="if(event.key===\'Enter\')nxRenameGo(\''+id+'\')"><div class="bar"><button class="solid" onclick="nxRenameGo(\''+id+'\')">'+esc(t('cm_save'))+'</button><button class="txt" onclick="closeM()">'+esc(t('cancel'))+'</button></div>');
+  setTimeout(()=>{const i=document.getElementById('nxrn');if(i){i.focus();i.select();}},60);
+}
+async function nxRenameGo(id){
+  const v=(document.getElementById('nxrn')||{}).value;const n=String(v||'').trim();if(!n)return;
+  try{await nxPatch(id,{name:n});closeM();const old=NXP.sw;NXP.sw=false;drawRows();NXP.sw=old;if(id===cur)try{drawPane();}catch{}}catch(e){fail(e);}
+}
+async function nxExport(id){nxCmClose();const o=cur;cur=id;try{await expP();}finally{cur=o;}}
+async function nxDelete(id){nxCmClose();const o=cur;cur=id;try{await delP();}finally{if(cur===id)cur=o;}}
+// --- drag to reorder (hold left button on a profile and move) ---
+var NXD=null,NXDS=false;
+document.addEventListener('pointerdown',e=>{
+  if(e.button!==0||NXD)return;const r=e.target.closest&&e.target.closest('#rows .prow');if(!r||e.target.closest('.go'))return;
+  NXD={r,id:r.dataset.id,y0:e.clientY,on:false};
+});
+document.addEventListener('pointermove',e=>{
+  if(!NXD)return;const dy=e.clientY-NXD.y0;
+  if(!NXD.on){
+    if(Math.abs(dy)<8)return;
+    const rows=[...document.querySelectorAll('#rows .prow')];NXD.rows=rows;NXD.i0=rows.indexOf(NXD.r);
+    NXD.rc=rows.map(x=>{const b=x.getBoundingClientRect();return{t:b.top,h:b.height};});NXD.on=true;
+    document.body.classList.add('nxdg');NXD.r.classList.add('nxdrag');rows.forEach(x=>{if(x!==NXD.r)x.style.transition='transform .16s var(--ease)';});
+  }
+  const rc=NXD.rc,i0=NXD.i0,hh=rc[i0].h;
+  const lo=rc[0].t-rc[0].h*.3-rc[i0].t,hi=rc[rc.length-1].t+rc[rc.length-1].h*.3-rc[i0].t;
+  const d=Math.max(lo,Math.min(hi,dy));NXD.r.style.transform='translateY('+d+'px)';
+  const mid=rc[i0].t+hh/2+d;let ni=0;rc.forEach((c,k)=>{if(k!==i0&&c.t+c.h/2<mid)ni++;});NXD.ni=ni;
+  NXD.rows.forEach((x,k)=>{if(k===i0)return;let s=0;if(i0<ni&&k>i0&&k<=ni)s=-hh;else if(i0>ni&&k<i0&&k>=ni)s=hh;x.style.transform=s?'translateY('+s+'px)':'';});
+});
+async function nxDragEnd(){
+  const D=NXD;NXD=null;if(!D||!D.on)return;
+  document.body.classList.remove('nxdg');NXDS=true;setTimeout(()=>{NXDS=false;},60);
+  D.rows.forEach(x=>{x.style.transform='';x.style.transition='';x.classList.remove('nxdrag');});
+  const ids=D.rows.map(x=>x.dataset.id);ids.splice(D.i0,1);ids.splice(D.ni,0,D.id);
+  const by=new Map(S.profiles.map(p=>[p.id,p]));S.profiles=ids.map(i=>by.get(i)).filter(Boolean);
+  const old=NXP.sw;NXP.sw=false;drawRows();NXP.sw=old;
+  try{await A('porder',S.profiles.map(x=>x.id));}catch(e){fail(e);}
+}
+document.addEventListener('pointerup',nxDragEnd);document.addEventListener('pointercancel',nxDragEnd);
+document.addEventListener('click',e=>{if(NXDS){e.stopPropagation();e.preventDefault();}},true);

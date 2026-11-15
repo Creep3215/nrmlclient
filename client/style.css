@@ -534,3 +534,33 @@ body.dr-on #dr .dr-pill{animation:nxPop .4s .12s var(--ease) both}
 .nxbadge{font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:.06em}
 .nxck{display:flex;gap:8px;align-items:center;margin:0;font-size:13px}
 #modal label.nxck{flex-direction:row;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px}#modal label.nxck input{width:auto;margin:0}
+
+/* 2.9 profile menu / drag / recolour / light mode */
+.prow:hover{background:color-mix(in srgb,var(--p1) 60%,transparent)}
+.prow.on{background:color-mix(in srgb,var(--p1) 38%,transparent)}
+.prow.pc{background:color-mix(in srgb,var(--pc) 9%,transparent)}
+.prow.pc:hover{background:color-mix(in srgb,var(--pc) 16%,transparent)}
+.prow.pc.on{background:color-mix(in srgb,var(--pc) 22%,transparent)}
+.prow.pc:before{background:var(--pc)}.prow.pc .ix{color:var(--pc)}
+.nxpin{font-style:normal;color:var(--acc);margin-right:6px;font-size:11px}
+.prow.nxdrag{position:relative;z-index:5;transition:none!important;animation:none!important;background:var(--p2);box-shadow:3px 3px 0 #000;opacity:.96}
+body.nxdg{user-select:none;cursor:grabbing}body.nxdg .prow{cursor:grabbing}
+#nxcm{position:fixed;z-index:200;min-width:190px;padding:4px;background:var(--p2);border:1px solid var(--line2);box-shadow:4px 4px 0 #000;animation:nxcm .12s var(--ease)}
+@keyframes nxcm{from{opacity:0;transform:scale(.96)}}
+#nxcm button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;background:transparent;color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+#nxcm button:hover{background:color-mix(in srgb,var(--acc) 16%,transparent)}
+#nxcm button i{font-style:normal;width:16px;text-align:center;color:var(--mut)}
+#nxcm button.dng{color:#ef6b6b}#nxcm button.dng i{color:#ef6b6b}
+.nxsw{display:none;gap:7px;padding:6px 10px 8px;align-items:center;flex-wrap:wrap}.nxsw.on{display:flex}
+.nxsw span{width:18px;height:18px;border-radius:50%;cursor:pointer;outline:2px solid transparent;outline-offset:2px}
+.nxsw span.on{outline-color:var(--ink)}.nxsw span.nxno2{background:none;color:var(--mut);display:grid;place-items:center;font-size:16px;line-height:1}
+.nxcu{position:relative;width:18px;height:18px;border-radius:50%;border:1px dashed var(--mut);display:grid;place-items:center;font-size:13px;color:var(--mut);cursor:pointer}
+.nxcu input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+/* white mode */
+html[data-mode=light]{--bg:#f2efe8;--p1:#ffffff;--p2:#e9e5db;--line:#d9d4c8;--line2:#bdb7a8;--ink:#1c1b19;--mut:#6d6a63;color-scheme:light}
+html[data-mode=light] #nxcm,html[data-mode=light] #nxsr,html[data-mode=light] .prow.nxdrag{box-shadow:3px 3px 0 rgba(0,0,0,.25)}
+html[data-mode=light] .nxsb{background:rgba(0,0,0,.04)}
+html[data-mode=light] .nxi:hover,html[data-mode=light] .nxv.cur{background:rgba(0,0,0,.05)}
+html[data-mode=light] .nxv em.st,html[data-mode=light] .nxv em.ty{background:rgba(0,0,0,.07)}
+html[data-mode=light] .nxft{background:rgba(0,0,0,.04)}
+#nxcm button{justify-content:flex-start;text-transform:none;letter-spacing:0;font-size:13px;box-shadow:none}
